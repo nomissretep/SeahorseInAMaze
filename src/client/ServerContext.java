@@ -1,76 +1,63 @@
 package client;
 
+
 import generated.LoginMessageType;
-import generated.LoginReplyMessageType;
 import generated.MazeCom;
+import generated.MazeComType;
 import generated.ObjectFactory;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.net.Socket;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
-import networking.UTFInputStream;
-import networking.UTFOutputStream;
+import networking.XmlInStream;
+import networking.XmlOutStream;
 
 public class ServerContext {
-	private Socket socket;
-	private UTFInputStream utfin;
-	private UTFOutputStream utfout;
+	ObjectFactory obf = new ObjectFactory();
+	Socket socket;
+	XmlOutStream xmlout;
+	XmlInStream xmlin;
 
-	private JAXBContext jc;
-	private ObjectFactory of;
-	private javax.xml.bind.Marshaller m;
-	private Unmarshaller um;
-
-	public ServerContext() {
-		try {
-			of = new ObjectFactory();
-			jc = JAXBContext.newInstance(MazeCom.class);
-			m = jc.createMarshaller();
-		} catch (JAXBException e) {
-			System.out.println("Fehler beim Erstellen der JAXB-Dateien:");
-			e.printStackTrace();
-			System.exit(1);
-		}
+	int id;
+	public ServerContext(Socket s) throws IOException {
+		this.socket = s;
+		xmlout = new XmlOutStream(s.getOutputStream());
+		xmlin = new XmlInStream(s.getInputStream());
 	}
 
-	public int login(String hostname, int port, String name) throws IOException, JAXBException{
-			socket = new Socket(hostname, port);
-			utfout=new UTFOutputStream(socket.getOutputStream());
-			utfin=new UTFInputStream(socket.getInputStream());
-			MazeCom mc = new MazeCom();
-			
-			// Erstellen der Login- Nachricht und abschicken 
-			LoginMessageType lmt= of.createLoginMessageType();
-			lmt.setName(name); //TODO
-			StringWriter sw = new StringWriter();
-			mc.setLoginMessage(lmt);
-			m.marshal(mc, sw);
-			utfout.writeUTF8(sw.toString());
-			
-			StringReader sr = new StringReader(utfin.readUTF8());
-			//empfangen der login-reply-message
-			mc = (MazeCom) um.unmarshal(sr);
-			LoginReplyMessageType lrt = mc.getLoginReplyMessage();
-			int id = lrt.getNewID();//hier noch diverse Fehlermeldungen in der LoginreplyMessage beachten
-			
-			return id;//soll vom Server eine id bekommen, die dann benutzt wird
+	public void login() throws IOException {
+		this.login("Amazing Seahorse");
 	}
-
-	public void send(MazeCom mc, int id) throws IOException, JAXBException{
-		StringWriter sw = new StringWriter();
-		m.marshal(mc, sw);
-		utfout.writeUTF8(sw.toString());
+	public void send(MazeCom mc) throws IOException, JAXBException{
 		
 	}
-
-	public MazeCom receive() {
-		return new MazeCom();
+	public MazeCom receive(){
+		return null;
+	}
+	
+	public void login(String name) throws IOException{
+		MazeCom request = obf.createMazeCom();
+		request.setMcType(MazeComType.LOGIN);
+		LoginMessageType loginMessage = obf.createLoginMessageType();
+		loginMessage.setName(name);
+		request.setLoginMessage(loginMessage);
+		xmlout.write(request);
+		MazeCom response = xmlin.readMazeCom();
+		if(response.getMcType().equals(MazeComType.LOGINREPLY)) {
+			id = response.getLoginReplyMessage().getNewID();
+		} else if(response.getMcType().equals(MazeComType.DISCONNECT)) {
+			System.out.println("Server disconnected me:");
+			System.out.println(response.getDisconnectMessage().getErroCode().name());
+		} else if(response.getMcType().equals(MazeComType.ACCEPT)) {
+			if(!request.getAcceptMessage().isAccept()) {
+				//Server does not accept me - try another name...
+				this.login(name + "e");
+			} else {
+				System.out.println("This is now very weird.");
+			}
+		}
 	}
 
 }

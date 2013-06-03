@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-api-doc.zip"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-api-src.zip"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-impl.src.zip"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-impl-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-xjc.jar"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-xjc.src.zip"/>
+	<classpathentry kind="lib" path="/home/matthias/Projekte/SeahorseInAMaze/lib/jaxb-xjc-javadoc.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -14,11 +14,8 @@ public class UTFInputStream{
 
 	public String readUTF8() throws IOException {
 
-		while (is.available() < 4) {
-			Thread.yield();
-		}
-		byte[] tmp = new byte[4];
-		is.read(tmp);
+		byte[] tmp = readNBytes(4);
+		
 
 		int len = 0;
 		len |= (tmp[3] & 0xff);
@@ -29,11 +26,7 @@ public class UTFInputStream{
 		len <<= 8;
 		len |= (tmp[0] & 0xff);
 
-		byte[] bytes = new byte[len];
-		while (is.available() < len) {
-			Thread.yield();
-		}
-		is.read(bytes);
+		byte[] bytes = readNBytes(len);
 		String message = new String(bytes, "UTF-8");
 		return message;
 	}
@@ -42,6 +35,17 @@ public class UTFInputStream{
 		this.is.close();
 	}
 	
+	private byte[] readNBytes(int n) throws IOException {
+		if(n <= 0) throw new IllegalArgumentException();
+		byte buf[] = new byte[n];
+		
+		int readcount = 0;
+		while(readcount < n) {
+			readcount += is.read(buf, readcount, n-readcount);
+		}
+		
+		return buf;
+	}
 }
 
 

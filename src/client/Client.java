@@ -4,40 +4,34 @@ import generated.MazeCom;
 import generated.WinMessageType;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.xml.bind.JAXBException;
 
-import spieler.SimpleKI;
-import spieler.Spieler;
+//import spieler.SimpleKI;
+//import spieler.Spieler;
 
 
 public class Client {
 	private ServerContext context;
-	private String hostname;
-	private int port;
-	private int id;
 	public boolean cont;
-	private Spieler spieler;
+	//private Spieler spieler;
 
-	public Client(String hostname, int port) {
-		this.hostname = hostname;
-		this.port = port;
-		context = new ServerContext();
+	public Client(String hostname, int port) throws UnknownHostException, IOException{
+		Socket s = new Socket(hostname, port);
+		context = new ServerContext(s);
 
-		spieler = new SimpleKI();//andere KIs oder menschliche Nutzer hier einstellbar
+//		spieler = new SimpleKI();//andere KIs oder menschliche Nutzer hier einstellbar
 	}
 
 	public void run() {
 		try {
-			id = context.login(hostname, port, spieler.getName());
+			context.login(""/* spieler.getName()*/);
 		} catch (IOException e) {
 			System.out.println("Login fehlgeschlagen");
 			e.printStackTrace();
-		} catch (JAXBException e) {
-			System.out.println("Fehler bei der Uebertragung");
-			e.printStackTrace();
-
-		}
+		} 
 
 		boolean sent = false;// gibt an, ob die letzte Nachricht ein awaitMove(true) oder ein Accept(false) war
 
@@ -48,9 +42,9 @@ public class Client {
 			switch (mc.getMcType()) {
 
 			case AWAITMOVE:
-				answer.setMoveMessage(spieler.doTurn(mc.getAwaitMoveMessage().getBoard()));
+				//answer.setMoveMessage(spieler.doTurn(mc.getAwaitMoveMessage().getBoard()));
 				try{
-					context.send(answer, id);
+					context.send(answer);
 				}catch(IOException e){
 					System.out.println("Verbindungsfehler beim Senden: ");
 					e.printStackTrace();
@@ -106,5 +100,4 @@ public class Client {
 		}
 
 	}
-
-}
+	}
