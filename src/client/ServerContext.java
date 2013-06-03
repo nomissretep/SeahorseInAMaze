@@ -1,13 +1,15 @@
 package client;
 
+
 import generated.LoginMessageType;
-import generated.LoginReplyMessageType;
 import generated.MazeCom;
 import generated.MazeComType;
 import generated.ObjectFactory;
 
 import java.io.IOException;
 import java.net.Socket;
+
+import javax.xml.bind.JAXBException;
 
 import networking.XmlInStream;
 import networking.XmlOutStream;
@@ -28,8 +30,14 @@ public class ServerContext {
 	public void login() throws IOException {
 		this.login("Amazing Seahorse");
 	}
+	public void send(MazeCom mc) throws IOException, JAXBException{
+		
+	}
+	public MazeCom receive(){
+		return null;
+	}
 	
-	private void login(String name) throws IOException{
+	public void login(String name) throws IOException{
 		MazeCom request = obf.createMazeCom();
 		request.setMcType(MazeComType.LOGIN);
 		LoginMessageType loginMessage = obf.createLoginMessageType();
