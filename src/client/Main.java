@@ -3,6 +3,8 @@ package client;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import spieler.TestKI;
+
 public class Main {
 	public static void main(String args[]) throws UnknownHostException, IOException{
 		String hostname;
@@ -15,7 +17,7 @@ public class Main {
 			port = Integer.parseInt(args[1]);
 		}
 		Client client = new Client(hostname, port);
-		client.run();
+		client.run(new TestKI());
 	}
 
 }
