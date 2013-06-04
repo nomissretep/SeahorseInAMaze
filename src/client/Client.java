@@ -1,19 +1,14 @@
 package client;
 
 import generated.AwaitMoveMessageType;
-import generated.MazeCom;
 import generated.MazeComType;
 import generated.MoveMessageType;
-import generated.WinMessageType;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.xml.bind.JAXBException;
-
 import spieler.Spieler;
-
 import client.types.GameHasEndedException;
 import client.types.IllegalTurnException;
 import client.types.RecievedWrongTypeException;
