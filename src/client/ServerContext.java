@@ -1,15 +1,22 @@
 package client;
 
 
+import generated.AcceptMessageType;
+import generated.AwaitMoveMessageType;
 import generated.LoginMessageType;
 import generated.MazeCom;
 import generated.MazeComType;
+import generated.MoveMessageType;
 import generated.ObjectFactory;
 
 import java.io.IOException;
 import java.net.Socket;
 
 import javax.xml.bind.JAXBException;
+
+import client.types.GameHasEndedException;
+import client.types.IllegalTurnException;
+import client.types.RecievedWrongTypeException;
 
 import networking.XmlInStream;
 import networking.XmlOutStream;
@@ -57,6 +64,37 @@ public class ServerContext {
 			} else {
 				System.out.println("This is now very weird.");
 			}
+		}
+	}
+	
+	public AwaitMoveMessageType waitForMyTurn() throws GameHasEndedException {
+		MazeCom packet = xmlin.readMazeCom();
+		if (packet.getMcType().equals(MazeComType.AWAITMOVE)) {
+			return packet.getAwaitMoveMessage();
+		} else if(packet.getMcType().equals(MazeComType.WIN)) {
+			throw new GameHasEndedException(packet.getWinMessage());
+		} else {
+			throw new RecievedWrongTypeException(packet);
+		}
+	}
+	
+	public void doMyTurn(MoveMessageType moveMessage) throws IllegalTurnException {
+		MazeCom message = obf.createMazeCom();
+		message.setId(id);
+		message.setMcType(MazeComType.MOVE);
+		message.setMoveMessage(moveMessage);
+		xmlout.write(message);
+		
+		MazeCom response = xmlin.readMazeCom();
+		if (response.getMcType().equals(MazeComType.ACCEPT)) {
+			AcceptMessageType acceptMessage = response.getAcceptMessage();
+			if (acceptMessage.isAccept()) {
+				return;
+			} else {
+				throw new IllegalTurnException(acceptMessage.getErrorCode().name());
+			}
+		} else {
+			throw new RecievedWrongTypeException(response);
 		}
 	}
 }
