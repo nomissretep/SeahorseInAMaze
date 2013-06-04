@@ -31,10 +31,10 @@ public class ServerContext {
 		this.login("Amazing Seahorse");
 	}
 	public void send(MazeCom mc) throws IOException, JAXBException{
-		
+		xmlout.write(mc);
 	}
 	public MazeCom receive(){
-		return null;
+		return xmlin.readMazeCom();
 	}
 	
 	public void login(String name) throws IOException{
@@ -59,5 +59,4 @@ public class ServerContext {
 			}
 		}
 	}
-
 }
