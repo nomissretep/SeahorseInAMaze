@@ -11,7 +11,7 @@ public class Main {
 		int port;
 		if (args.length!=2){
 			hostname= "localhost";
-			port = 1234;
+			port = 5123;
 		} else{
 			hostname = args[0];
 			port = Integer.parseInt(args[1]);
