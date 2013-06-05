@@ -1,5 +1,6 @@
 package networking;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -40,8 +41,14 @@ public class UTFInputStream{
 		byte buf[] = new byte[n];
 		
 		int readcount = 0;
+		int lastreadcount;
 		while(readcount < n) {
-			readcount += is.read(buf, readcount, n-readcount);
+			lastreadcount = is.read(buf, readcount, n-readcount);
+			if(lastreadcount == -1) {
+				throw new EOFException(String.format("Could only get %d of %d requested bytes",readcount,n));
+			}
+			readcount += lastreadcount;
+			
 		}
 		
 		return buf;
