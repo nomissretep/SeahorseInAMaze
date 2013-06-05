@@ -45,7 +45,7 @@ public class ServerContext {
 		return this.xmlin.readMazeCom();
 	}
 
-	public void login(String name) throws IOException {
+	public int login(String name) throws IOException {
 		MazeCom request = this.obf.createMazeCom();
 		request.setMcType(MazeComType.LOGIN);
 		LoginMessageType loginMessage = this.obf.createLoginMessageType();
@@ -67,6 +67,7 @@ public class ServerContext {
 				System.out.println("This is now very weird.");
 			}
 		}
+		return id;
 	}
 
 	public AwaitMoveMessageType waitForMyTurn() throws GameHasEndedException {

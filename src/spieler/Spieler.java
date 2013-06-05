@@ -8,8 +8,11 @@ public abstract class Spieler {
 	public abstract MoveMessageType doTurn(BoardType bt);
 	public abstract String getName();
 	protected int id;
-	public Spieler(int id){
+	
+	
+	public void setId(int id){
 		this.id=id;
 	}
+	
 	
 }

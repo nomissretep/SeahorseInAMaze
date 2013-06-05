@@ -4,8 +4,9 @@ import generated.BoardType;
 import generated.MoveMessageType;
 import generated.ObjectFactory;
 
-public class TestKI implements Spieler {
+public class TestKI extends Spieler {
 
+	
 	ObjectFactory obf = new ObjectFactory();
 
 	@Override

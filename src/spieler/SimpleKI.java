@@ -3,7 +3,9 @@ package spieler;
 import generated.BoardType;
 import generated.MoveMessageType;
 
-public class SimpleKI implements Spieler {
+public class SimpleKI extends Spieler {
+
+	
 
 	public String name = "Simple";
 

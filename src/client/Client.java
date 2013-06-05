@@ -30,14 +30,16 @@ public class Client {
 		Socket s = new Socket(hostname, port);
 		this.context = new ServerContext(s);
 
-		spieler = new SimpleKI(0);//andere KIs oder menschliche Nutzer hier einstellbar
+		spieler = new SimpleKI();//andere KIs oder menschliche Nutzer hier einstellbar
 	}
 
 	public void run(Spieler spieler) {
 		try {
 
-			context.login(spieler.getName());
-
+			int id;
+			id=context.login(spieler.getName());
+			spieler.setId(id);
+			
 		} catch (IOException e) {
 			System.out.println("Login fehlgeschlagen");
 			e.printStackTrace();
