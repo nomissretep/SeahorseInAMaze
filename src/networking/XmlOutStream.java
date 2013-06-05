@@ -10,7 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-public class XmlOutStream extends UTFOutputStream{
+public class XmlOutStream extends UTFOutputStream {
 
 	private Marshaller marshaller;
 
@@ -53,6 +53,5 @@ public class XmlOutStream extends UTFOutputStream{
 			e1.printStackTrace();
 		}
 	}
-	
 
 }
