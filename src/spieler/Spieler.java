@@ -3,8 +3,12 @@ package spieler;
 import generated.BoardType;
 import generated.MoveMessageType;
 
-public interface Spieler {
-	public MoveMessageType doTurn(BoardType bt);
-	public String getName();
+public abstract class Spieler {
+	public abstract MoveMessageType doTurn(BoardType bt);
+	public abstract String getName();
+	protected int id;
+	public Spieler(int id){
+		this.id=id;
+	}
 	
 }

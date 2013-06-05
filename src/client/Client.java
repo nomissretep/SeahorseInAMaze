@@ -13,25 +13,25 @@ import client.types.GameHasEndedException;
 import client.types.IllegalTurnException;
 import client.types.RecievedWrongTypeException;
 
-//import spieler.SimpleKI;
-//import spieler.Spieler;
+import spieler.SimpleKI;
+import spieler.Spieler;
 
 
 public class Client {
 	private ServerContext context;
 	public boolean cont;
-	//private Spieler spieler;
+	private Spieler spieler;
 
 	public Client(String hostname, int port) throws UnknownHostException, IOException{
 		Socket s = new Socket(hostname, port);
 		context = new ServerContext(s);
 
-//		spieler = new SimpleKI();//andere KIs oder menschliche Nutzer hier einstellbar
+		spieler = new SimpleKI();//andere KIs oder menschliche Nutzer hier einstellbar
 	}
 
 	public void run(Spieler spieler) {
 		try {
-			context.login(""/* spieler.getName()*/);
+			context.login(spieler.getName());
 		} catch (IOException e) {
 			System.out.println("Login fehlgeschlagen");
 			e.printStackTrace();
