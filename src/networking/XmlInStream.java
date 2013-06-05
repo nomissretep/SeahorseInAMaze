@@ -16,7 +16,7 @@ public class XmlInStream extends UTFInputStream {
 
 	public XmlInStream(InputStream in) {
 		super(in);
-		try {			
+		try {
 			JAXBContext jc = JAXBContext.newInstance(MazeCom.class);
 			this.unmarshaller = jc.createUnmarshaller();
 		} catch (JAXBException e) {

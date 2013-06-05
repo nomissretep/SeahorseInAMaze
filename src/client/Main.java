@@ -6,13 +6,14 @@ import java.net.UnknownHostException;
 import spieler.TestKI;
 
 public class Main {
-	public static void main(String args[]) throws UnknownHostException, IOException{
+	public static void main(String args[]) throws UnknownHostException,
+			IOException {
 		String hostname;
 		int port;
-		if (args.length!=2){
-			hostname= "localhost";
+		if (args.length != 2) {
+			hostname = "localhost";
 			port = 5123;
-		} else{
+		} else {
 			hostname = args[0];
 			port = Integer.parseInt(args[1]);
 		}

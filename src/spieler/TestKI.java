@@ -7,9 +7,10 @@ import generated.ObjectFactory;
 public class TestKI implements Spieler {
 
 	ObjectFactory obf = new ObjectFactory();
+
 	@Override
 	public MoveMessageType doTurn(BoardType bt) {
-		MoveMessageType mmt = obf.createMoveMessageType();
+		MoveMessageType mmt = this.obf.createMoveMessageType();
 		return mmt;
 	}
 

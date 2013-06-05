@@ -3,19 +3,17 @@ package networking;
 import java.io.IOException;
 import java.io.OutputStream;
 
-
 public class UTFOutputStream {
 
 	private OutputStream os;
 
 	public UTFOutputStream(OutputStream stream) {
-		os = stream;
+		this.os = stream;
 	}
 
-	public void writeUTF8(String text) throws IOException
-	{
+	public void writeUTF8(String text) throws IOException {
 		byte[] bytes = text.getBytes("UTF-8");
-		int len=bytes.length;
+		int len = bytes.length;
 
 		byte[] lenbuf = new byte[4];
 		lenbuf[0] = (byte) (len & 0xff);
@@ -26,15 +24,15 @@ public class UTFOutputStream {
 		len >>= 8;
 		lenbuf[3] = (byte) (len & 0xff);
 
-		os.write(lenbuf);
-		os.write(bytes);
+		this.os.write(lenbuf);
+		this.os.write(bytes);
 	}
 
 	public void flush() throws IOException {
-		os.flush();
+		this.os.flush();
 	}
 
 	public void close() throws IOException {
-		this.os.close();		
+		this.os.close();
 	}
 }
