@@ -23,12 +23,15 @@ public class Board {
 	public void setShiftCard(Card c){
 		shiftCard=c;
 	}
+	
 	public Card getShiftCard(){
 		return shiftCard;
 	}
+	
 	public void setTreasure(TreasureType t){
 		treasure = t;
 	}
+	
 	public TreasureType getTreasureType(){
 		return treasure;
 	}
