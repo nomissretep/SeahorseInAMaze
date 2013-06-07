@@ -14,7 +14,7 @@ public class Board {
 	protected TreasuresToGoType ttg;// der als naechstes zu erreichende Schatz
 									// (enthaelt auch die PlayerId)
 	protected PositionType myPosition;//aktuelle Position des Spielers
-	protected PositionType forbidden;//die Posittion, an die nicht gelegt werden darf
+	protected PositionType forbidden;//die Position, an die nicht gelegt werden darf
 	protected PositionType treasure;//position des zu findenden schatzes
 
 	public PositionType myPosition() {
@@ -22,7 +22,8 @@ public class Board {
 	}
 
 	public void setCard(int i, int j, Card c) {
-		cards[i][j] = c;
+		if(i>0 && j>0 && i<cards.length && j<cards[i].length)
+			cards[i][j] = c;
 	}
 
 	public Card[][] getCards() {
@@ -41,22 +42,29 @@ public class Board {
 		myPosition = new PositionType();
 		this.ttg = ttg;
 		int i = 0, j = 0;
+		boolean foundMe=false, foundTreasure=false;
 		for (BoardType.Row row : b.getRow()) {
 			for (CardType c : row.getCol()) {
 				cards[i][j] = new Card(c);
 				if (c.getPin().getPlayerID().contains(ttg.getPlayer())) {
 					myPosition.setRow(i);
 					myPosition.setCol(j);
+					foundMe=true;
 				}
 				if (c.getTreasure().equals(ttg.getTreasures())) {
 					treasure.setRow(i);
 					treasure.setCol(j);
+					foundTreasure=true;
 				}
 				j++;
 			}
 			i++;
 		}
+		
 		shiftCard = new Card(b.getShiftCard());
+		if(!(foundMe||foundTreasure)){
+			System.out.println("Ungueltiges Brett");
+		}
 
 	}
 

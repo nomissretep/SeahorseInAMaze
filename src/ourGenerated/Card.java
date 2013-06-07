@@ -10,13 +10,13 @@ public class Card {
 	protected boolean openings[] = new boolean[4];
 	// 0=oben, 1=rechts, 2=unten, 3=links
 	protected TreasureType treasure;
-	protected ArrayList<Integer> ids;
+	protected ArrayList<Integer> players;
 
-	public ArrayList<Integer> getIDs(){
-		return ids;
+	public ArrayList<Integer> getPlayers(){
+		return players;
 	}
 	public Card(CardType c) {
-		ids =(ArrayList<Integer>)c.getPin().getPlayerID();
+		players =(ArrayList<Integer>)c.getPin().getPlayerID();
 		treasure = c.getTreasure();
 		openings[0] = c.getOpenings().isTop();
 		openings[1] = c.getOpenings().isRight();
@@ -35,8 +35,8 @@ public class Card {
 		open.setLeft(openings[3]);
 		card.setOpenings(open);
 		CardType.Pin pin = new CardType.Pin();
-		for (int i = 0; i < ids.size(); i++)
-			pin.getPlayerID().add(ids.get(i));
+		for (int i = 0; i < players.size(); i++)
+			pin.getPlayerID().add(players.get(i));
 
 		return card;
 	}
