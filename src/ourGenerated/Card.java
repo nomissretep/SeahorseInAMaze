@@ -46,4 +46,10 @@ public class Card {
 	public void setTreasure(TreasureType treasure) {
 		this.treasure = treasure;
 	}
+	public void turnCounterClockwise(){
+		boolean top = openings[0];
+		for(int i=1;i<openings.length;i++)
+			openings[i-1]=openings[i];
+		openings[3]=top;
+	}
 }
