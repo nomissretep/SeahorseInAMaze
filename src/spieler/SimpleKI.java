@@ -2,6 +2,7 @@ package spieler;
 
 import generated.BoardType;
 import generated.MoveMessageType;
+import generated.TreasuresToGoType;
 import ourGenerated.Board;
 import ourGenerated.Card;
 
@@ -25,9 +26,9 @@ public class SimpleKI extends Spieler {
 	//(6,1)(6,3)(6,5)
 
 	@Override
-	public MoveMessageType doTurn(BoardType bt) {
-		Board original = new Board(bt,id);
-		Board modified = new Board(bt,id);
+	public MoveMessageType doTurn(BoardType bt, TreasuresToGoType ttg) {
+		Board original = new Board(bt,ttg);
+		Board modified = new Board(bt,ttg);
 		Card card = original.getShiftCard();
 		for(int i=0;i<original.getCards().length;i+=6){
 			for(int j=1;j<original.getCards()[i].length;j+=2){
