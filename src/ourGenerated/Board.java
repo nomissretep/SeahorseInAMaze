@@ -19,14 +19,14 @@ public class Board {
 	protected TreasureType treasure;// der als naechstes zu erreichende Schatz
 	protected int id;
 	// (enthaelt auch die PlayerId)
-	protected PositionType myPosition;// aktuelle Position des Spielers
+	protected Position myPosition;// aktuelle Position des Spielers
 	protected Position forbidden;// die Position, an die nicht gelegt werden
 	// darf
-	protected PositionType treasurePosition;// position des zu findenden
+	protected Position treasurePosition;// position des zu findenden
 
 	// schatzes
 
-	public PositionType myPosition() {
+	public Position myPosition() {
 		return myPosition;
 	}
 
@@ -48,7 +48,6 @@ public class Board {
 		return spielerPositions;
 	}
 	public Board(BoardType b, TreasureType t, int id) {
-		myPosition = new PositionType();
 		this.treasure = t;
 		this.id = id;
 		int y = 0, x = 0;
@@ -60,14 +59,12 @@ public class Board {
 				for(int playerID: c.getPin().getPlayerID()) {
 					spielerPositions.put(playerID, p);
 					if(playerID == id) {
-						myPosition.setRow(y);
-						myPosition.setCol(x);
+						myPosition = p;
 						foundMe = true;						
 					}
 				}
 				if (c.getTreasure().equals(t)) {
-					treasurePosition.setRow(y);
-					treasurePosition.setCol(x);
+					treasurePosition = p;
 					foundTreasure = true;
 				}
 				// die shiftcard ueberpruefen TODO
@@ -100,19 +97,15 @@ public class Board {
 		return this.treasure;
 	}
 
-	public PositionType getMyPosition() {
+	public Position getMyPosition() {
 		return this.myPosition;
-	}
-
-	public void setMyPosition(PositionType myPosition) {
-		this.myPosition = myPosition;
 	}
 
 	public Position getForbidden() {
 		return this.forbidden;
 	}
 
-	public PositionType getTreasurePosition() {
+	public Position getTreasurePosition() {
 		return this.treasurePosition;
 	}
 	
@@ -166,17 +159,13 @@ public class Board {
 		shiftCard = new Card(b.shiftCard);
 
 		// forbidden-Position kopieren
-		forbidden = new Position(b.forbidden.x, b.forbidden.y);
+		forbidden = b.forbidden;
 
 		// myPosition kopieren
-		myPosition = new PositionType();
-		myPosition.setCol(b.myPosition.getCol());
-		myPosition.setRow(b.myPosition.getRow());
+		myPosition = b.myPosition;
 
 		// treasure-Position kopieren
-		treasurePosition = new PositionType();
-		treasurePosition.setCol(b.treasurePosition.getCol());
-		treasurePosition.setRow(b.treasurePosition.getRow());
+		treasurePosition = b.treasurePosition;
 
 		// treasure kopieren
 		treasure = b.getTreasure();
@@ -236,6 +225,8 @@ public class Board {
 		for(int spieler: spielerPositions.keySet()) {
 			newBoard.spielerPositions.put(spieler, shiftPosition(spielerPositions.get(spieler), start, direction, vertikal));
 		}
+		newBoard.myPosition = shiftPosition(myPosition, start, direction, vertikal);
+		newBoard.treasurePosition = shiftPosition(treasurePosition, start, direction, vertikal);
 		//TODO: shift my & treasure position
 
 		return newBoard;
