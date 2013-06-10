@@ -48,6 +48,7 @@ public class Board {
 		return spielerPositions;
 	}
 	public Board(BoardType b, TreasureType t, int id) {
+		this.forbidden = b.getForbidden() != null ? new Position(b.getForbidden()) : null;
 		this.cards = new Card[7][7];
 		this.treasure = t;
 		this.id = id;
@@ -240,18 +241,16 @@ public class Board {
 	}
 
 	public boolean isValidMove(Position p, Card c) {
-		if (!c.isSame(shiftCard) || p.equals(forbidden))
+		if (!c.isSame(shiftCard)) {
+			System.err.println("Shiftcard is not the same.");
 			return false;
-		boolean valid = false;
-		for (int i = 0; i < getCards().length; i += 6) {
-			for (int j = 1; j < getCards()[i].length; j += 2) {
-				if (p.equals(new Position(i, j))
-						|| p.equals(new Position(j, i))) {
-					valid = true;
-				}
-			}
 		}
-		return valid;
+		if(p.equals(forbidden)) {
+			System.err.println("Forbidden Card used.");
+			return false;
+		}
+			
+		return ( (p.x%6==0 && p.y%2==1)  || (p.y%6==0 && p.x%2==1) );
 	}
 	
 	private Position shiftPosition(Position p, int start, int direction, boolean vertical) {
