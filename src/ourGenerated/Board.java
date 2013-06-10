@@ -5,6 +5,8 @@ import generated.CardType;
 import generated.PositionType;
 import generated.TreasureType;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -126,42 +128,45 @@ public class Board {
 		this.cards = cards;
 	}
 	
-	public class Pathfinding {
-		public List<PositionType> getPossiblePositionsFromPosition(PositionType pos) {
-			int canVisit[] = new int[7*7];
-			int canVisitSize = 0;
-			int haveRevisited = 0;
-			int currentIndex;
-			canVisit[canVisitSize++] = pos.getRow()*7 + pos.getCol();
-			int x, y;
-			boolean[] currentCardOpenings;
+	public List<Position> getPossiblePositionsFromPosition(PositionType pos) {
+		int canVisit[] = new int[7*7];
+		int canVisitSize = 0;
+		int haveRevisited = 0;
+		int currentIndex;
+		canVisit[canVisitSize++] = pos.getRow()*7 + pos.getCol();
+		int x, y;
+		boolean[] currentCardOpenings;
+		
+		while(haveRevisited < canVisitSize) {
+			currentIndex = canVisit[haveRevisited++];
+			x = currentIndex % 7;
+			y = currentIndex / 7;
+			currentCardOpenings = cards[y][x].openings;
 			
-			while(haveRevisited < canVisitSize) {
-				currentIndex = canVisit[haveRevisited++];
-				x = currentIndex % 7;
-				y = currentIndex / 7;
-				currentCardOpenings = cards[y][x].openings;
-				
-				if(y > 0 && currentCardOpenings[0] && cards[y - 1][x].openings[2]) { // Oben
-					canVisit[canVisitSize++] = (currentIndex - 7);
-				}
-				
-				if(x < 7-1 && currentCardOpenings[1] && cards[y][x + 1].openings[3]) { // Rechts
-					canVisit[canVisitSize++] = (currentIndex + 1);
-				}
-				
-				if(y < 7-1 && currentCardOpenings[2] && cards[y + 1][x].openings[0]) { // Unten
-					canVisit[canVisitSize++] = (currentIndex + 7);
-				}
-				
-				if(x > 0 && currentCardOpenings[3] && cards[y][x - 1].openings[1]) { // Links
-					canVisit[canVisitSize++] = currentIndex - 1;
-				}
+			if(y > 0 && currentCardOpenings[0] && cards[y - 1][x].openings[2]) { // Oben
+				canVisit[canVisitSize++] = (currentIndex - 7);
 			}
 			
+			if(x < 7-1 && currentCardOpenings[1] && cards[y][x + 1].openings[3]) { // Rechts
+				canVisit[canVisitSize++] = (currentIndex + 1);
+			}
 			
+			if(y < 7-1 && currentCardOpenings[2] && cards[y + 1][x].openings[0]) { // Unten
+				canVisit[canVisitSize++] = (currentIndex + 7);
+			}
+			
+			if(x > 0 && currentCardOpenings[3] && cards[y][x - 1].openings[1]) { // Links
+				canVisit[canVisitSize++] = currentIndex - 1;
+			}
 		}
+		
+		ArrayList<Position> list = new ArrayList<Position>(canVisitSize);
+		for(int i=canVisitSize - 1; i>=0; i--) {
+			list.set(i, new Position(canVisit[i]%7, canVisit[i]/7));
+		}
+		return list;
 	}
+
 
 	public Board(Board b) {
 		// cards kopieren
