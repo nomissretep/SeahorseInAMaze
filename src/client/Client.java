@@ -20,22 +20,14 @@ public class Client {
 	private ServerContext context;
 	public boolean cont;
 
-	private Spieler spieler;
-
-
-
-
 	public Client(String hostname, int port) throws UnknownHostException,
 			IOException {
 		Socket s = new Socket(hostname, port);
 		this.context = new ServerContext(s);
-
-		spieler = new SimpleKI();//andere KIs oder menschliche Nutzer hier einstellbar
 	}
 
 	public void run(Spieler spieler) {
 		try {
-
 			int id;
 			id=context.login(spieler.getName());
 			spieler.setId(id);
@@ -48,10 +40,9 @@ public class Client {
 		try {
 
 			while (true) {// Der Ablauf des Programms
-
 				AwaitMoveMessageType request = this.context.waitForMyTurn();
-				MoveMessageType myturn = spieler.doTurn(request.getBoard());
 				while (true) {
+					MoveMessageType myturn = spieler.doTurn(request.getBoard());
 					try {
 						this.context.doMyTurn(myturn);
 						break;
