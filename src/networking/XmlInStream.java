@@ -1,6 +1,7 @@
 package networking;
 
 import generated.MazeCom;
+import generated.MazeComType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,11 +38,13 @@ public class XmlInStream extends UTFInputStream {
 			String xml = this.readUTF8();
 			// TODO entfernen
 			System.out.println("Empfangen");
-			System.out.println(xml);
+			
 			bytes = xml.getBytes();
 			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 
 			result = (MazeCom) this.unmarshaller.unmarshal(bais);
+			if(!result.getMcType().equals(MazeComType.AWAITMOVE))
+				System.out.println(xml);
 			// TODO entferne Aufgabe
 		} catch (JAXBException e) {
 			e.printStackTrace();
