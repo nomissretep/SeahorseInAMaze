@@ -102,13 +102,24 @@ public class Card {
 	 */
 	public boolean isSame(Card other) {
 		Card c = new Card(other);
-		for(int i=0;i<openings.length;i++){
+		for (int i = 0; i < openings.length; i++) {
 			c.turnCounterClockwise(1);
-			if(this.equals(c))
+			if (this.equals(c))
 				return true;
 		}
-		
-		
+
 		return false;
+	}
+
+	public boolean[] getOpenings() {
+		return this.openings;
+	}
+
+	public void setOpenings(boolean[] openings) {
+		this.openings = openings;
+	}
+
+	public void setPlayers(ArrayList<Integer> players) {
+		this.players = players;
 	}
 }

@@ -67,7 +67,14 @@ public class Board {
 					treasurePosition = p;
 					foundTreasure = true;
 				}
-				// die shiftcard ueberpruefen TODO
+				if(shiftCard.getTreasure().equals(t)){
+					foundTreasure=true;
+					treasurePosition= new Position(-1,-1);
+				}
+				if(shiftCard.getPlayers().contains(id)){
+					foundMe=true;
+					myPosition=new Position(-1,-1);
+				}
 				x++;
 			}
 			y++;
