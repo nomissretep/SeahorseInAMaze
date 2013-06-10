@@ -12,11 +12,12 @@ public class Card {
 	protected TreasureType treasure;
 	protected ArrayList<Integer> players;
 
-	public ArrayList<Integer> getPlayers(){
+	public ArrayList<Integer> getPlayers() {
 		return players;
 	}
+
 	public Card(CardType c) {
-		players =(ArrayList<Integer>)c.getPin().getPlayerID();
+		players = (ArrayList<Integer>) c.getPin().getPlayerID();
 		treasure = c.getTreasure();
 		openings[0] = c.getOpenings().isTop();
 		openings[1] = c.getOpenings().isRight();
@@ -27,7 +28,7 @@ public class Card {
 
 	public CardType getCardType() {
 		CardType card = new CardType();
-		
+
 		CardType.Openings open = new CardType.Openings();
 		open.setTop(openings[0]);
 		open.setRight(openings[1]);
@@ -40,16 +41,32 @@ public class Card {
 
 		return card;
 	}
+
 	public TreasureType getTreasure() {
 		return treasure;
 	}
+
 	public void setTreasure(TreasureType treasure) {
 		this.treasure = treasure;
 	}
-	public void turnCounterClockwise(){
+
+	public void turnCounterClockwise() {
 		boolean top = openings[0];
-		for(int i=1;i<openings.length;i++)
-			openings[i-1]=openings[i];
-		openings[3]=top;
+		for (int i = 1; i < openings.length; i++)
+			openings[i - 1] = openings[i];
+		openings[3] = top;
+	}
+
+	public Card(Card c) {
+		//openings
+		for (int i = 0; i < openings.length; i++)
+			openings[i] = c.openings[i];
+		//players
+		players = new ArrayList<Integer>();
+		for(Integer i: c.players)
+			players.add(i);
+		//treasure
+		treasure = c.getTreasure();
+		//das ist zwar kein Copy, treasure wird aber sowieso nicht veraendert... FIXME
 	}
 }

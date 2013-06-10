@@ -12,17 +12,18 @@ public class Board {
 	private Card cards[][];
 	protected Card shiftCard;// die einzufuegende Karte
 	protected TreasuresToGoType ttg;// der als naechstes zu erreichende Schatz
-									// (enthaelt auch die PlayerId)
-	protected PositionType myPosition;//aktuelle Position des Spielers
-	protected PositionType forbidden;//die Position, an die nicht gelegt werden darf
-	protected PositionType treasure;//position des zu findenden schatzes
+	// (enthaelt auch die PlayerId)
+	protected PositionType myPosition;// aktuelle Position des Spielers
+	protected PositionType forbidden;// die Position, an die nicht gelegt werden
+										// darf
+	protected PositionType treasure;// position des zu findenden schatzes
 
 	public PositionType myPosition() {
 		return myPosition;
 	}
 
 	public void setCard(int i, int j, Card c) {
-		if(i>0 && j>0 && i<cards.length && j<cards[i].length)
+		if (i > 0 && j > 0 && i < cards.length && j < cards[i].length)
 			cards[i][j] = c;
 	}
 
@@ -42,27 +43,27 @@ public class Board {
 		myPosition = new PositionType();
 		this.ttg = ttg;
 		int i = 0, j = 0;
-		boolean foundMe=false, foundTreasure=false;
+		boolean foundMe = false, foundTreasure = false;
 		for (BoardType.Row row : b.getRow()) {
 			for (CardType c : row.getCol()) {
 				cards[i][j] = new Card(c);
 				if (c.getPin().getPlayerID().contains(ttg.getPlayer())) {
 					myPosition.setRow(i);
 					myPosition.setCol(j);
-					foundMe=true;
+					foundMe = true;
 				}
 				if (c.getTreasure().equals(ttg.getTreasures())) {
 					treasure.setRow(i);
 					treasure.setCol(j);
-					foundTreasure=true;
+					foundTreasure = true;
 				}
 				j++;
 			}
 			i++;
 		}
-		
+
 		shiftCard = new Card(b.getShiftCard());
-		if(!(foundMe||foundTreasure)){
+		if (!(foundMe || foundTreasure)) {
 			System.out.println("Ungueltiges Brett");
 		}
 
@@ -115,6 +116,36 @@ public class Board {
 
 	public void setCards(Card[][] cards) {
 		this.cards = cards;
+	}
+
+	public Board(Board b) {
+		//cards kopieren
+		cards = new Card[b.cards.length][b.cards[0].length];
+		for(int i=0;i<b.cards.length;i++)
+			for(int j=0;j<b.cards[i].length;j++)
+				cards[i][j]= new Card(b.cards[i][j]);
+		//shiftCard kopieren
+		shiftCard = new Card(b.shiftCard);
+		
+		//forbidden-Position kopieren
+		forbidden = new PositionType();
+		forbidden.setCol(b.forbidden.getCol());
+		forbidden.setRow(b.forbidden.getRow());
+		
+		//myPosition kopieren
+		myPosition = new PositionType();
+		myPosition.setCol(b.myPosition.getCol());
+		myPosition.setRow(b.myPosition.getRow());
+		
+		//treasure-Position kopieren
+		treasure = new PositionType();
+		treasure.setCol(b.treasure.getCol());
+		treasure.setRow(b.treasure.getRow());
+		
+		//TTG kopieren
+		ttg = new TreasuresToGoType();
+		ttg.setPlayer(b.ttg.getPlayer());
+		ttg.setTreasures(b.ttg.getTreasures());
 	}
 
 }
