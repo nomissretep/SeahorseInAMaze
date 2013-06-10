@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import client.types.IllegalTurnException;
 
@@ -47,29 +49,37 @@ public class Board {
 		return shiftCard;
 	}
 
+	protected Map<Integer, Position> spielerPositions = new TreeMap<Integer, Position>();
+	public Map<Integer, Position> getSpielerPositions() {
+		return spielerPositions;
+	}
 	public Board(BoardType b, TreasureType t, int id) {
 		myPosition = new PositionType();
 		this.treasure = t;
 		this.id = id;
-		int i = 0, j = 0;
+		int y = 0, x = 0;
 		boolean foundMe = false, foundTreasure = false;
 		for (BoardType.Row row : b.getRow()) {
 			for (CardType c : row.getCol()) {
-				cards[i][j] = new Card(c);
-				if (c.getPin().getPlayerID().contains(id)) {
-					myPosition.setRow(i);
-					myPosition.setCol(j);
-					foundMe = true;
+				cards[y][x] = new Card(c);
+				Position p = new Position(x,y);
+				for(int playerID: c.getPin().getPlayerID()) {
+					spielerPositions.put(playerID, p);
+					if(playerID == id) {
+						myPosition.setRow(y);
+						myPosition.setCol(x);
+						foundMe = true;						
+					}
 				}
-				if (c.getTreasure().equals(id)) {
-					treasurePosition.setRow(i);
-					treasurePosition.setCol(j);
+				if (c.getTreasure().equals(t)) {
+					treasurePosition.setRow(y);
+					treasurePosition.setCol(x);
 					foundTreasure = true;
 				}
 				// die shiftcard ueberpruefen TODO
-				j++;
+				x++;
 			}
-			i++;
+			y++;
 		}
 
 		shiftCard = new Card(b.getShiftCard());
