@@ -6,8 +6,6 @@ import generated.PositionType;
 import generated.TreasureType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,10 +37,6 @@ public class Board {
 
 	public Card[][] getCards() {
 		return cards;
-	}
-
-	public void setShiftCard(Card c) {
-		shiftCard = c;
 	}
 
 	public Card getShiftCard() {
@@ -106,10 +100,6 @@ public class Board {
 		return this.treasure;
 	}
 
-	public void setTreasure(TreasureType t) {
-		this.treasure = t;
-	}
-
 	public PositionType getMyPosition() {
 		return this.myPosition;
 	}
@@ -122,20 +112,8 @@ public class Board {
 		return this.forbidden;
 	}
 
-	public void setForbidden(Position forbidden) {
-		this.forbidden = forbidden;
-	}
-
 	public PositionType getTreasurePosition() {
 		return this.treasurePosition;
-	}
-
-	public void setTreasurePosition(PositionType treasure) {
-		this.treasurePosition = treasure;
-	}
-
-	public void setCards(Card[][] cards) {
-		this.cards = cards;
 	}
 	
 	public List<Position> getPossiblePositionsFromPosition(PositionType pos) {
