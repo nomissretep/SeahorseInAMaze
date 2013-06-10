@@ -38,7 +38,8 @@ public class Card {
 		CardType.Pin pin = new CardType.Pin();
 		for (int i = 0; i < players.size(); i++)
 			pin.getPlayerID().add(players.get(i));
-
+		card.setPin(pin);
+		card.setTreasure(treasure);
 		return card;
 	}
 

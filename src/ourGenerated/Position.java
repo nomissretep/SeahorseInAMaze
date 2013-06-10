@@ -31,5 +31,8 @@ public class Position {
 		pt.setRow(y);
 		return pt;
 	}
+	public String toString() {
+		return String.format("(%d, %d)",x,y);
+	}
 
 }
