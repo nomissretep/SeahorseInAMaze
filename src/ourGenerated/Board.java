@@ -246,7 +246,7 @@ public class Board {
 			return false;
 		}
 		if(p.equals(forbidden)) {
-			System.err.println("Forbidden Card used.");
+			System.err.println("Forbidden Position used.");
 			return false;
 		}
 			
@@ -259,6 +259,19 @@ public class Board {
 		} else {
 			return new Position(p.x == start ? (7 + p.x + direction)%7 : p.x, p.y);
 		}
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Illegal Position: "+forbidden);
+		sb.append('\n');
+		for(int y = 0; y < 7; y++) {
+			for(int x = 0; x < 7; x++) {
+				sb.append(cards[y][x].getChar());
+			}
+			sb.append('\n');
+		}
+		return sb.toString();
 	}
 
 }
