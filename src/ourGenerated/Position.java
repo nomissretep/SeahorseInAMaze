@@ -9,8 +9,8 @@ public class Position {
 	public final int y;
 	
 	public Position(PositionType p) {
-		x=p.getRow();
-		y=p.getCol();
+		x=p.getCol();
+		y=p.getRow();
 	}
 	
 	public boolean equals(Object o){
