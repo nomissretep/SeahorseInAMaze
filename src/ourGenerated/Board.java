@@ -48,11 +48,13 @@ public class Board {
 		return spielerPositions;
 	}
 	public Board(BoardType b, TreasureType t, int id) {
+		this.cards = new Card[7][7];
 		this.treasure = t;
 		this.id = id;
 		int y = 0, x = 0;
 		boolean foundMe = false, foundTreasure = false;
 		for (BoardType.Row row : b.getRow()) {
+			x = 0;
 			for (CardType c : row.getCol()) {
 				cards[y][x] = new Card(c);
 				Position p = new Position(x,y);
@@ -63,7 +65,7 @@ public class Board {
 						foundMe = true;						
 					}
 				}
-				if (c.getTreasure().equals(t)) {
+				if (t.equals(c.getTreasure())) {
 					treasurePosition = p;
 					foundTreasure = true;
 				}
@@ -117,6 +119,7 @@ public class Board {
 		canVisit[canVisitSize++] = position.y*7 + position.x;
 		int x, y;
 		boolean[] currentCardOpenings;
+		boolean[] visited = new boolean[7*7];
 		
 		while(haveRevisited < canVisitSize) {
 			currentIndex = canVisit[haveRevisited++];
@@ -124,26 +127,30 @@ public class Board {
 			y = currentIndex / 7;
 			currentCardOpenings = cards[y][x].openings;
 			
-			if(y > 0 && currentCardOpenings[0] && cards[y - 1][x].openings[2]) { // Oben
+			if(y > 0 && !visited[currentIndex - 7] && currentCardOpenings[0] && cards[y - 1][x].openings[2]) { // Oben
 				canVisit[canVisitSize++] = (currentIndex - 7);
+				visited[currentIndex - 7]=true;
 			}
 			
-			if(x < 7-1 && currentCardOpenings[1] && cards[y][x + 1].openings[3]) { // Rechts
+			if(x < 7-1 && !visited[currentIndex + 1] &&currentCardOpenings[1] && cards[y][x + 1].openings[3]) { // Rechts
 				canVisit[canVisitSize++] = (currentIndex + 1);
+				visited[currentIndex + 1]=true;
 			}
 			
-			if(y < 7-1 && currentCardOpenings[2] && cards[y + 1][x].openings[0]) { // Unten
+			if(y < 7-1 && !visited[currentIndex + 7] &&currentCardOpenings[2] && cards[y + 1][x].openings[0]) { // Unten
 				canVisit[canVisitSize++] = (currentIndex + 7);
+				visited[currentIndex + 7]=true;
 			}
 			
-			if(x > 0 && currentCardOpenings[3] && cards[y][x - 1].openings[1]) { // Links
+			if(x > 0 && !visited[currentIndex - 1] &&currentCardOpenings[3] && cards[y][x - 1].openings[1]) { // Links
 				canVisit[canVisitSize++] = currentIndex - 1;
+				visited[currentIndex - 1]=true;
 			}
 		}
 		
 		ArrayList<Position> list = new ArrayList<Position>(canVisitSize);
-		for(int i=canVisitSize - 1; i>=0; i--) {
-			list.set(i, new Position(canVisit[i]%7, canVisit[i]/7));
+		for(int i=canVisitSize -1; i>=0; --i) {
+			list.add(new Position(canVisit[i]%7, canVisit[i]/7));
 		}
 		return list;
 	}
