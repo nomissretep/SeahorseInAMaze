@@ -25,4 +25,11 @@ public class Position {
 		this.y=y;
 	}
 
+	public PositionType getPositionType() {
+		PositionType pt = new PositionType();
+		pt.setCol(x);
+		pt.setRow(y);
+		return pt;
+	}
+
 }
