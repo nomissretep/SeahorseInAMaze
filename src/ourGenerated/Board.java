@@ -7,6 +7,8 @@ import generated.TreasureType;
 
 import java.util.List;
 
+import client.types.IllegalTurnException;
+
 public class Board {
 
 	private Card cards[][];
@@ -15,10 +17,11 @@ public class Board {
 	protected int id;
 	// (enthaelt auch die PlayerId)
 	protected PositionType myPosition;// aktuelle Position des Spielers
-	protected PositionType forbidden;// die Position, an die nicht gelegt werden
+	protected Position forbidden;// die Position, an die nicht gelegt werden
 	// darf
 	protected PositionType treasurePosition;// position des zu findenden
-											// schatzes
+
+	// schatzes
 
 	public PositionType myPosition() {
 		return myPosition;
@@ -60,6 +63,7 @@ public class Board {
 					treasurePosition.setCol(j);
 					foundTreasure = true;
 				}
+				// die shiftcard ueberpruefen TODO
 				j++;
 			}
 			i++;
@@ -101,11 +105,11 @@ public class Board {
 		this.myPosition = myPosition;
 	}
 
-	public PositionType getForbidden() {
+	public Position getForbidden() {
 		return this.forbidden;
 	}
 
-	public void setForbidden(PositionType forbidden) {
+	public void setForbidden(Position forbidden) {
 		this.forbidden = forbidden;
 	}
 
@@ -131,9 +135,7 @@ public class Board {
 		shiftCard = new Card(b.shiftCard);
 
 		// forbidden-Position kopieren
-		forbidden = new PositionType();
-		forbidden.setCol(b.forbidden.getCol());
-		forbidden.setRow(b.forbidden.getRow());
+		forbidden = new Position(b.forbidden.x, b.forbidden.y);
 
 		// myPosition kopieren
 		myPosition = new PositionType();
@@ -147,9 +149,75 @@ public class Board {
 
 		// treasure kopieren
 		treasure = b.getTreasure();
+
+		// ID
+		id = b.id;
+	}
+
+	/**
+	 * 
+	 * @param p
+	 *            Die Position, an der eingefuegt wird
+	 * @param c
+	 *            die Karte, die eingefuegt wird
+	 * @return
+	 */
+	public Board shift(Position p, Card c) throws IllegalTurnException {
+		if (!isValidMove(p, c))
+			throw new IllegalTurnException(
+					"Es wurde kein gueltiger Zuge gefunden");
+		Board newBoard = new Board(this);
+		Card tmp=null;
+		int start = 0, direction = 0;
+		boolean vertikal = false;
+		if (p.x == 0) {// Karte wird oben eingefuegt
+			tmp = cards[6][p.y];// die unterste Karte der Spalte
+			start = 0;
+			direction = 1;
+			vertikal = true;
+		} else if (p.x == 6) {// Karte wird unten eingefuegt
+			tmp = cards[0][p.y];// die oberste Karte der Spalte
+			start = 6;
+			direction = -1;
+			vertikal = true;
+		} else if (p.y == 0) {// karte wird links eingefuegt
+			tmp = cards[p.x][6];// die letzte Karte der Spalte
+			start = 0;
+			direction = 1;
+			vertikal = false;
+		} else if (p.y == 6) {
+			tmp = cards[p.x][0];
+			start = 6;
+			direction = -1;
+			vertikal = false;
+		}
 		
-		//ID
-		id=b.id;
+		for (int i = start; i <= 6 && i>=0 && i+direction<=6 && i+direction>=0; i += direction) {
+			if (vertikal) {
+				cards[i][p.y]=cards[i+direction][p.y];
+			} else {
+				cards[p.x][i]=cards[p.x][i+direction];
+			}
+		}
+		cards[p.x][p.y]=new Card(shiftCard);
+		shiftCard=tmp;
+
+		return newBoard;
+	}
+
+	public boolean isValidMove(Position p, Card c) {
+		if (!c.isSame(shiftCard) || p.equals(forbidden))
+			return false;
+		boolean valid = false;
+		for (int i = 0; i < getCards().length; i += 6) {
+			for (int j = 1; j < getCards()[i].length; j += 2) {
+				if (p.equals(new Position(i, j))
+						|| p.equals(new Position(j, i))) {
+					valid = true;
+				}
+			}
+		}
+		return valid;
 	}
 
 }

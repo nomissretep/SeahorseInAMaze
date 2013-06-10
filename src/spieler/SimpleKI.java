@@ -1,5 +1,7 @@
 package spieler;
 
+import java.util.Map;
+
 import com.sun.java.swing.plaf.gtk.GTKConstants.PositionType;
 
 import generated.BoardType;
@@ -23,7 +25,7 @@ public class SimpleKI extends Spieler {
 	// (5,0)(5,6)
 	// (6,1)(6,3)(6,5)
 
-	@Override
+	
 	public MoveMessageType doTurn(BoardType bt, TreasuresToGoType ttg) {
 		Board original=null;// = new Board(bt, ttg,0);
 		Board modified;
@@ -70,6 +72,13 @@ public class SimpleKI extends Spieler {
 
 			return 0;
 		}
+	}
+
+	@Override
+	public MoveMessageType doTurn(Board bt,
+			Map<Integer, Integer> idHasNTreasuresleft) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
