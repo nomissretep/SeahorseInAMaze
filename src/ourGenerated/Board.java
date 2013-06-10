@@ -224,22 +224,22 @@ public class Board {
 		int start = 0, direction = 0;
 		boolean vertikal = false;
 		if (p.x == 0) {// Karte wird oben eingefuegt
-			tmp = cards[6][p.y];// die unterste Karte der Spalte
+			tmp = newBoard.cards[6][p.y];// die unterste Karte der Spalte
 			start = 0;
 			direction = 1;
 			vertikal = true;
 		} else if (p.x == 6) {// Karte wird unten eingefuegt
-			tmp = cards[0][p.y];// die oberste Karte der Spalte
+			tmp = newBoard.cards[0][p.y];// die oberste Karte der Spalte
 			start = 6;
 			direction = -1;
 			vertikal = true;
 		} else if (p.y == 0) {// karte wird links eingefuegt
-			tmp = cards[p.x][6];// die letzte Karte der Spalte
+			tmp = newBoard.cards[p.x][6];// die letzte Karte der Spalte
 			start = 0;
 			direction = 1;
 			vertikal = false;
 		} else if (p.y == 6) {
-			tmp = cards[p.x][0];
+			tmp = newBoard.cards[p.x][0];
 			start = 6;
 			direction = -1;
 			vertikal = false;
@@ -247,13 +247,18 @@ public class Board {
 		
 		for (int i = start; i <= 6 && i>=0 && i+direction<=6 && i+direction>=0; i += direction) {
 			if (vertikal) {
-				cards[i][p.y]=cards[i+direction][p.y];
+				newBoard.cards[i][p.y]=newBoard.cards[i+direction][p.y];
 			} else {
-				cards[p.x][i]=cards[p.x][i+direction];
+				newBoard.cards[p.x][i]=newBoard.cards[p.x][i+direction];
 			}
 		}
-		cards[p.x][p.y]=new Card(shiftCard);
-		shiftCard=tmp;
+		newBoard.cards[p.x][p.y]=new Card(shiftCard);
+		newBoard.shiftCard=tmp;
+		
+		for(int spieler: spielerPositions.keySet()) {
+			newBoard.spielerPositions.put(spieler, shiftPosition(spielerPositions.get(spieler), start, direction, vertikal));
+		}
+		//TODO: shift my & treasure position
 
 		return newBoard;
 	}
@@ -271,6 +276,14 @@ public class Board {
 			}
 		}
 		return valid;
+	}
+	
+	private Position shiftPosition(Position p, int start, int direction, boolean vertical) {
+		if(vertical) {
+			return new Position(p.x, p.y == start ? (7 + p.y + direction)%7 : p.y);
+		} else {
+			return new Position(p.x == start ? (7 + p.x + direction)%7 : p.x, p.y);
+		}
 	}
 
 }
