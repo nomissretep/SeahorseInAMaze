@@ -3,7 +3,7 @@ package ourGenerated;
 import generated.BoardType;
 import generated.CardType;
 import generated.PositionType;
-import generated.TreasuresToGoType;
+import generated.TreasureType;
 
 import java.util.List;
 
@@ -11,12 +11,14 @@ public class Board {
 
 	private Card cards[][];
 	protected Card shiftCard;// die einzufuegende Karte
-	protected TreasuresToGoType ttg;// der als naechstes zu erreichende Schatz
+	protected TreasureType treasure;// der als naechstes zu erreichende Schatz
+	protected int id;
 	// (enthaelt auch die PlayerId)
 	protected PositionType myPosition;// aktuelle Position des Spielers
 	protected PositionType forbidden;// die Position, an die nicht gelegt werden
-										// darf
-	protected PositionType treasure;// position des zu findenden schatzes
+	// darf
+	protected PositionType treasurePosition;// position des zu findenden
+											// schatzes
 
 	public PositionType myPosition() {
 		return myPosition;
@@ -39,22 +41,23 @@ public class Board {
 		return shiftCard;
 	}
 
-	public Board(BoardType b, TreasuresToGoType ttg) {
+	public Board(BoardType b, TreasureType t, int id) {
 		myPosition = new PositionType();
-		this.ttg = ttg;
+		this.treasure = t;
+		this.id = id;
 		int i = 0, j = 0;
 		boolean foundMe = false, foundTreasure = false;
 		for (BoardType.Row row : b.getRow()) {
 			for (CardType c : row.getCol()) {
 				cards[i][j] = new Card(c);
-				if (c.getPin().getPlayerID().contains(ttg.getPlayer())) {
+				if (c.getPin().getPlayerID().contains(id)) {
 					myPosition.setRow(i);
 					myPosition.setCol(j);
 					foundMe = true;
 				}
-				if (c.getTreasure().equals(ttg.getTreasures())) {
-					treasure.setRow(i);
-					treasure.setCol(j);
+				if (c.getTreasure().equals(id)) {
+					treasurePosition.setRow(i);
+					treasurePosition.setCol(j);
 					foundTreasure = true;
 				}
 				j++;
@@ -82,12 +85,12 @@ public class Board {
 		return b;
 	}
 
-	public TreasuresToGoType getTtg() {
-		return this.ttg;
+	public TreasureType getTreasure() {
+		return this.treasure;
 	}
 
-	public void setTtg(TreasuresToGoType ttg) {
-		this.ttg = ttg;
+	public void setTreasure(TreasureType t) {
+		this.treasure = t;
 	}
 
 	public PositionType getMyPosition() {
@@ -106,12 +109,12 @@ public class Board {
 		this.forbidden = forbidden;
 	}
 
-	public PositionType getTreasure() {
-		return this.treasure;
+	public PositionType getTreasurePosition() {
+		return this.treasurePosition;
 	}
 
-	public void setTreasure(PositionType treasure) {
-		this.treasure = treasure;
+	public void setTreasurePosition(PositionType treasure) {
+		this.treasurePosition = treasure;
 	}
 
 	public void setCards(Card[][] cards) {
@@ -119,33 +122,34 @@ public class Board {
 	}
 
 	public Board(Board b) {
-		//cards kopieren
+		// cards kopieren
 		cards = new Card[b.cards.length][b.cards[0].length];
-		for(int i=0;i<b.cards.length;i++)
-			for(int j=0;j<b.cards[i].length;j++)
-				cards[i][j]= new Card(b.cards[i][j]);
-		//shiftCard kopieren
+		for (int i = 0; i < b.cards.length; i++)
+			for (int j = 0; j < b.cards[i].length; j++)
+				cards[i][j] = new Card(b.cards[i][j]);
+		// shiftCard kopieren
 		shiftCard = new Card(b.shiftCard);
-		
-		//forbidden-Position kopieren
+
+		// forbidden-Position kopieren
 		forbidden = new PositionType();
 		forbidden.setCol(b.forbidden.getCol());
 		forbidden.setRow(b.forbidden.getRow());
-		
-		//myPosition kopieren
+
+		// myPosition kopieren
 		myPosition = new PositionType();
 		myPosition.setCol(b.myPosition.getCol());
 		myPosition.setRow(b.myPosition.getRow());
+
+		// treasure-Position kopieren
+		treasurePosition = new PositionType();
+		treasurePosition.setCol(b.treasurePosition.getCol());
+		treasurePosition.setRow(b.treasurePosition.getRow());
+
+		// treasure kopieren
+		treasure = b.getTreasure();
 		
-		//treasure-Position kopieren
-		treasure = new PositionType();
-		treasure.setCol(b.treasure.getCol());
-		treasure.setRow(b.treasure.getRow());
-		
-		//TTG kopieren
-		ttg = new TreasuresToGoType();
-		ttg.setPlayer(b.ttg.getPlayer());
-		ttg.setTreasures(b.ttg.getTreasures());
+		//ID
+		id=b.id;
 	}
 
 }
