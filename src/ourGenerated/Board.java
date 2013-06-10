@@ -109,12 +109,12 @@ public class Board {
 		return this.treasurePosition;
 	}
 	
-	public List<Position> getPossiblePositionsFromPosition(PositionType pos) {
+	public List<Position> getPossiblePositionsFromPosition(Position position) {
 		int canVisit[] = new int[7*7];
 		int canVisitSize = 0;
 		int haveRevisited = 0;
 		int currentIndex;
-		canVisit[canVisitSize++] = pos.getRow()*7 + pos.getCol();
+		canVisit[canVisitSize++] = position.y*7 + position.x;
 		int x, y;
 		boolean[] currentCardOpenings;
 		
