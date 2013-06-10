@@ -8,14 +8,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import spieler.Spieler;
+import spieler.ISpieler;
 import client.types.GameHasEndedException;
 import client.types.IllegalTurnException;
 import client.types.RecievedWrongTypeException;
-
-import spieler.ISpieler;
-import spieler.SimpleKI;
-import spieler.Spieler;
 
 public class Client {
 	private ServerContext context;
