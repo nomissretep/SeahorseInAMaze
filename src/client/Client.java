@@ -13,6 +13,7 @@ import client.types.GameHasEndedException;
 import client.types.IllegalTurnException;
 import client.types.RecievedWrongTypeException;
 
+import spieler.ISpieler;
 import spieler.SimpleKI;
 import spieler.Spieler;
 
@@ -26,7 +27,7 @@ public class Client {
 		this.context = new ServerContext(s);
 	}
 
-	public void run(Spieler spieler) {
+	public void run(ISpieler spieler) {
 		try {
 			int id;
 			id=context.login(spieler.getName());
@@ -42,7 +43,7 @@ public class Client {
 			while (true) {// Der Ablauf des Programms
 				AwaitMoveMessageType request = this.context.waitForMyTurn();
 				while (true) {
-					MoveMessageType myturn = spieler.doTurn(request.getBoard());
+					MoveMessageType myturn = spieler.doTurn(request);
 					try {
 						this.context.doMyTurn(myturn);
 						break;
