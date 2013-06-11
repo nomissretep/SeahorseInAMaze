@@ -42,7 +42,7 @@ public class Assessment {
 	}
 	
 	
-	public boolean[][] WhereICanGo(Position pos)
+	public boolean[][] WhereToGo(Position pos)
 	{
 		boolean[][] marked=new boolean[7][7];
 		WhereToGo(board.getCards(),pos,marked);
