@@ -70,15 +70,19 @@ public class Board {
 					treasurePosition = p;
 					foundTreasure = true;
 				}
-				// die shiftcard ueberpruefen TODO
 				x++;
 			}
 			y++;
 		}
 
 		shiftCard = new Card(b.getShiftCard());
-		if (!(foundMe || foundTreasure)) {
+		if(!foundTreasure && this.treasure.equals(shiftCard.treasure)) {
+			foundTreasure = true;
+			treasurePosition = null;
+		}
+		if (!foundMe || !foundTreasure) {
 			System.out.println("Ungueltiges Brett");
+			throw new IllegalArgumentException("Something is wrong with that board...");
 		}
 
 	}
@@ -108,6 +112,9 @@ public class Board {
 		return this.forbidden;
 	}
 
+	/**
+	 * @returns <b>null</b> if the current Treasure is on the shift card. 
+	 */
 	public Position getTreasurePosition() {
 		return this.treasurePosition;
 	}
