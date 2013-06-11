@@ -308,16 +308,23 @@ public class Board {
 			AnsiConsole.out.println("Shiftcard: "+shiftCard.getChar());
 		}
 
-		
+		String style;
 		for(int y = 0; y < 7; y++) {
 			for(int x = 0; x < 7; x++) {
+				style = "@|black";
 				if(x == myPosition.x && y == myPosition.y) {
-					AnsiConsole.out.print(AnsiRenderer.render("@|yellow " + cards[y][x].getChar() + "|@"));
-				} else if(treasurePosition != null && x == treasurePosition.x && y == treasurePosition.y) {
-					AnsiConsole.out.print(AnsiRenderer.render("@|bg_blue,white " + cards[y][x].getChar() + "|@"));
-				} else {
-					AnsiConsole.out.print(cards[y][x].getChar());
+					style+=",yellow";
 				}
+				if(!(y%2==1 || x%2==1)) {
+					style+=",negative_on";
+				}
+				if(treasurePosition != null && x == treasurePosition.x && y == treasurePosition.y) {
+					style+=",blue";
+				}
+				if(forbidden != null && x == forbidden.x && y == forbidden.y){
+					style+=",bg_red,white";
+				}
+				AnsiConsole.out.print(AnsiRenderer.render(style+" "+cards[y][x].getChar()+"|@"));
 				
 			}
 			AnsiConsole.out.println();
