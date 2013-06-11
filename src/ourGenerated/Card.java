@@ -166,4 +166,7 @@ public class Card {
 			}
 		}
 	}
+	public String toString() {
+		return ""+this.getChar()+" " + this.treasure + " " + this.players.toString();
+	}
 }

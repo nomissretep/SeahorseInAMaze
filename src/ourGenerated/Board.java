@@ -305,7 +305,7 @@ public class Board {
 		if(treasurePosition == null) {
 			AnsiConsole.out.println(AnsiRenderer.render("Shiftcard: @|bg_blue,white "+shiftCard.getChar()+"|@"));
 		} else {
-			AnsiConsole.out.println("Shiftcard: "+shiftCard.getChar());
+			AnsiConsole.out.println("Shiftcard: "+shiftCard);
 		}
 
 		String style;
