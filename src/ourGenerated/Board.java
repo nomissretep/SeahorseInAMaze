@@ -265,10 +265,26 @@ public class Board {
 	}
 	
 	private Position shiftPosition(Position p, int start, int direction, boolean vertical) {
-		if(vertical) {
-			return new Position(p.x, p.y == start ? (7 + p.y + direction)%7 : p.y);
+		if(p == null) { //Karte ist aktuelle shift-karte => sie wird an der neuen stelle reingeschoben.
+			if(vertical) {
+				if(direction > 0) {
+					return new Position(0, start); 
+				} else {
+					return new Position(6, start); 
+				}
+			} else {
+				if(direction > 0) {
+					return new Position(start, 0); 
+				} else {
+					return new Position(start, 6); 
+				}
+			}
 		} else {
-			return new Position(p.x == start ? (7 + p.x + direction)%7 : p.x, p.y);
+			if(vertical) {
+				return new Position(p.x, p.y == start ? (7 + p.y + direction)%7 : p.y);
+			} else {
+				return new Position(p.x == start ? (7 + p.x + direction)%7 : p.x, p.y);
+			}
 		}
 	}
 	
