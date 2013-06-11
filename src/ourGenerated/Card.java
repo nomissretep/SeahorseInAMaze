@@ -154,7 +154,16 @@ public class Card {
 					return '╥';
 				}
 			}
+		} else { //Weder oben noch unten offen
+			if(openings[1] && openings[3]) { //Rechts und links
+				return '═';
+			} else if(openings[1]) {
+				return '╞';
+			} else if(openings[3]) {
+				return '╡';
+			} else { //Garkeine öffnung
+				return 'X';
+			}
 		}
-		return 'X';
 	}
 }
