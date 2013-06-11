@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiRenderer;
+
 import client.types.IllegalTurnException;
 
 public class Board {
@@ -279,6 +283,29 @@ public class Board {
 			sb.append('\n');
 		}
 		return sb.toString();
+	}
+	
+	public void outputPretty() {
+		if(treasurePosition == null) {
+			AnsiConsole.out.println(AnsiRenderer.render("Shiftcard: @|bg_blue,white "+shiftCard.getChar()+"|@"));
+		} else {
+			AnsiConsole.out.println("Shiftcard: "+shiftCard.getChar());
+		}
+
+		
+		for(int y = 0; y < 7; y++) {
+			for(int x = 0; x < 7; x++) {
+				if(x == myPosition.x && y == myPosition.y) {
+					AnsiConsole.out.print(AnsiRenderer.render("@|yellow " + cards[y][x].getChar() + "|@"));
+				} else if(treasurePosition != null && x == treasurePosition.x && y == treasurePosition.y) {
+					AnsiConsole.out.print(AnsiRenderer.render("@|bg_blue,white " + cards[y][x].getChar() + "|@"));
+				} else {
+					AnsiConsole.out.print(cards[y][x].getChar());
+				}
+				
+			}
+			AnsiConsole.out.println();
+		}
 	}
 
 }
