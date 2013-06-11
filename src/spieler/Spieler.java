@@ -31,6 +31,7 @@ public abstract class Spieler implements ISpieler{
 	@Override
 	public MoveMessageType doTurn(AwaitMoveMessageType awaitMoveMessageType) {
 		Board board = new Board(awaitMoveMessageType.getBoard(), awaitMoveMessageType.getTreasure(), this.id);
+		System.out.println(board);
 		TreeMap<Integer, Integer> idHasNTreasuresleft = new TreeMap<Integer, Integer>();
 		for(TreasuresToGoType ttgt: awaitMoveMessageType.getTreasuresToGo()) {
 			idHasNTreasuresleft.put(ttgt.getPlayer(), ttgt.getTreasures());
@@ -44,7 +45,12 @@ public abstract class Spieler implements ISpieler{
 			}
 		}
 		lastIdHasNTreasuresleft = idHasNTreasuresleft;
-		return doTurn(board, idHasNTreasuresleft);
+		MoveMessageType moveMessage = doTurn(board, idHasNTreasuresleft);
+		if(moveMessage.getNewPinPos() == null) {
+			System.out.println("Don't want to move");
+			moveMessage.setNewPinPos(board.getMyPosition().getPositionType());
+		}
+		return moveMessage;
 	}
 	
 	

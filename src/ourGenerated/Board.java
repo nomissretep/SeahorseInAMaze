@@ -48,11 +48,14 @@ public class Board {
 		return spielerPositions;
 	}
 	public Board(BoardType b, TreasureType t, int id) {
+		this.forbidden = b.getForbidden() != null ? new Position(b.getForbidden()) : null;
+		this.cards = new Card[7][7];
 		this.treasure = t;
 		this.id = id;
 		int y = 0, x = 0;
 		boolean foundMe = false, foundTreasure = false;
 		for (BoardType.Row row : b.getRow()) {
+			x = 0;
 			for (CardType c : row.getCol()) {
 				cards[y][x] = new Card(c);
 				Position p = new Position(x,y);
@@ -63,7 +66,7 @@ public class Board {
 						foundMe = true;						
 					}
 				}
-				if (c.getTreasure().equals(t)) {
+				if (t.equals(c.getTreasure())) {
 					treasurePosition = p;
 					foundTreasure = true;
 				}
@@ -116,14 +119,15 @@ public class Board {
 		return this.treasurePosition;
 	}
 	
-	public List<Position> getPossiblePositionsFromPosition(PositionType pos) {
+	public List<Position> getPossiblePositionsFromPosition(Position position) {
 		int canVisit[] = new int[7*7];
 		int canVisitSize = 0;
 		int haveRevisited = 0;
 		int currentIndex;
-		canVisit[canVisitSize++] = pos.getRow()*7 + pos.getCol();
+		canVisit[canVisitSize++] = position.y*7 + position.x;
 		int x, y;
 		boolean[] currentCardOpenings;
+		boolean[] visited = new boolean[7*7];
 		
 		while(haveRevisited < canVisitSize) {
 			currentIndex = canVisit[haveRevisited++];
@@ -131,26 +135,30 @@ public class Board {
 			y = currentIndex / 7;
 			currentCardOpenings = cards[y][x].openings;
 			
-			if(y > 0 && currentCardOpenings[0] && cards[y - 1][x].openings[2]) { // Oben
+			if(y > 0 && !visited[currentIndex - 7] && currentCardOpenings[0] && cards[y - 1][x].openings[2]) { // Oben
 				canVisit[canVisitSize++] = (currentIndex - 7);
+				visited[currentIndex - 7]=true;
 			}
 			
-			if(x < 7-1 && currentCardOpenings[1] && cards[y][x + 1].openings[3]) { // Rechts
+			if(x < 7-1 && !visited[currentIndex + 1] &&currentCardOpenings[1] && cards[y][x + 1].openings[3]) { // Rechts
 				canVisit[canVisitSize++] = (currentIndex + 1);
+				visited[currentIndex + 1]=true;
 			}
 			
-			if(y < 7-1 && currentCardOpenings[2] && cards[y + 1][x].openings[0]) { // Unten
+			if(y < 7-1 && !visited[currentIndex + 7] &&currentCardOpenings[2] && cards[y + 1][x].openings[0]) { // Unten
 				canVisit[canVisitSize++] = (currentIndex + 7);
+				visited[currentIndex + 7]=true;
 			}
 			
-			if(x > 0 && currentCardOpenings[3] && cards[y][x - 1].openings[1]) { // Links
+			if(x > 0 && !visited[currentIndex - 1] &&currentCardOpenings[3] && cards[y][x - 1].openings[1]) { // Links
 				canVisit[canVisitSize++] = currentIndex - 1;
+				visited[currentIndex - 1]=true;
 			}
 		}
 		
 		ArrayList<Position> list = new ArrayList<Position>(canVisitSize);
-		for(int i=canVisitSize - 1; i>=0; i--) {
-			list.set(i, new Position(canVisit[i]%7, canVisit[i]/7));
+		for(int i=canVisitSize -1; i>=0; --i) {
+			list.add(new Position(canVisit[i]%7, canVisit[i]/7));
 		}
 		return list;
 	}
@@ -240,18 +248,16 @@ public class Board {
 	}
 
 	public boolean isValidMove(Position p, Card c) {
-		if (!c.isSame(shiftCard) || p.equals(forbidden))
+		if (!c.isSame(shiftCard)) {
+			System.err.println("Shiftcard is not the same.");
 			return false;
-		boolean valid = false;
-		for (int i = 0; i < getCards().length; i += 6) {
-			for (int j = 1; j < getCards()[i].length; j += 2) {
-				if (p.equals(new Position(i, j))
-						|| p.equals(new Position(j, i))) {
-					valid = true;
-				}
-			}
 		}
-		return valid;
+		if(p.equals(forbidden)) {
+			System.err.println("Forbidden Position used.");
+			return false;
+		}
+			
+		return ( (p.x%6==0 && p.y%2==1)  || (p.y%6==0 && p.x%2==1) );
 	}
 	
 	private Position shiftPosition(Position p, int start, int direction, boolean vertical) {
@@ -260,6 +266,19 @@ public class Board {
 		} else {
 			return new Position(p.x == start ? (7 + p.x + direction)%7 : p.x, p.y);
 		}
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Illegal Position: "+forbidden);
+		sb.append('\n');
+		for(int y = 0; y < 7; y++) {
+			for(int x = 0; x < 7; x++) {
+				sb.append(cards[y][x].getChar());
+			}
+			sb.append('\n');
+		}
+		return sb.toString();
 	}
 
 }

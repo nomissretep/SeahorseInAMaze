@@ -57,6 +57,7 @@ public class Client {
 				System.out.println("The Server does not like us. DISCONNECT: "
 						+ e.getFailPacket().getDisconnectMessage().getName());
 			} else {
+				System.out.println("Invalid Packet: " + e.getFailPacket().getMcType());
 				throw e;
 			}
 		}
