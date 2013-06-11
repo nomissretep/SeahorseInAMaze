@@ -166,4 +166,12 @@ public class Card {
 			}
 		}
 	}
+
+	public boolean[] getOpenings() {
+		return this.openings;
+	}
+
+	public void setOpenings(boolean[] openings) {
+		this.openings = openings;
+	}
 }
