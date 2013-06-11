@@ -200,48 +200,48 @@ public class Board {
 	public Board shift(Position p, Card c) throws IllegalTurnException {
 		if (!isValidMove(p, c))
 			throw new IllegalTurnException(
-					"Es wurde kein gueltiger Zuge gefunden");
+					"Es wurde kein gueltiger Zug gefunden");
 		Board newBoard = new Board(this);
 		Card tmp=null;
 		int start = 0, direction = 0;
-		boolean vertikal = false;
-		if (p.x == 0) {// Karte wird oben eingefuegt
-			tmp = newBoard.cards[6][p.y];// die unterste Karte der Spalte
+		boolean horizontal = false;
+		if (p.y == 0) {// Karte wird oben eingefuegt
+			tmp = newBoard.cards[6][p.x];// die unterste Karte der Spalte
 			start = 0;
 			direction = 1;
-			vertikal = true;
-		} else if (p.x == 6) {// Karte wird unten eingefuegt
-			tmp = newBoard.cards[0][p.y];// die oberste Karte der Spalte
+			horizontal = true;
+		} else if (p.y == 6) {// Karte wird unten eingefuegt
+			tmp = newBoard.cards[0][p.x];// die oberste Karte der Spalte
 			start = 6;
 			direction = -1;
-			vertikal = true;
-		} else if (p.y == 0) {// karte wird links eingefuegt
-			tmp = newBoard.cards[p.x][6];// die letzte Karte der Spalte
+			horizontal = true;
+		} else if (p.x == 0) {// karte wird links eingefuegt
+			tmp = newBoard.cards[p.y][6];// die letzte Karte der Spalte
 			start = 0;
 			direction = 1;
-			vertikal = false;
-		} else if (p.y == 6) {
-			tmp = newBoard.cards[p.x][0];
+			horizontal = false;
+		} else if (p.x == 6) {
+			tmp = newBoard.cards[p.y][0];
 			start = 6;
 			direction = -1;
-			vertikal = false;
+			horizontal = false;
 		}
 		
 		for (int i = start; i <= 6 && i>=0 && i+direction<=6 && i+direction>=0; i += direction) {
-			if (vertikal) {
-				newBoard.cards[i][p.y]=newBoard.cards[i+direction][p.y];
+			if (horizontal) {
+				newBoard.cards[i+direction][p.x]=newBoard.cards[i][p.x];
 			} else {
-				newBoard.cards[p.x][i]=newBoard.cards[p.x][i+direction];
+				newBoard.cards[p.y][i+direction]=newBoard.cards[p.y][i];
 			}
 		}
-		newBoard.cards[p.x][p.y]=new Card(shiftCard);
+		newBoard.cards[p.y][p.x]=new Card(shiftCard);
 		newBoard.shiftCard=tmp;
 		
 		for(int spieler: spielerPositions.keySet()) {
-			newBoard.spielerPositions.put(spieler, shiftPosition(spielerPositions.get(spieler), start, direction, vertikal));
+			newBoard.spielerPositions.put(spieler, shiftPosition(spielerPositions.get(spieler), start, direction, horizontal));
 		}
-		newBoard.myPosition = shiftPosition(myPosition, start, direction, vertikal);
-		newBoard.treasurePosition = shiftPosition(treasurePosition, start, direction, vertikal);
+		newBoard.myPosition = shiftPosition(myPosition, start, direction, horizontal);
+		newBoard.treasurePosition = shiftPosition(treasurePosition, start, direction, horizontal);
 		//TODO: shift my & treasure position
 
 		return newBoard;
