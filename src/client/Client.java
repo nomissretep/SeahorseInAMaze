@@ -38,15 +38,12 @@ public class Client {
 
 			while (true) {// Der Ablauf des Programms
 				AwaitMoveMessageType request = this.context.waitForMyTurn();
-				while (true) {
-					MoveMessageType myturn = spieler.doTurn(request);
-					try {
-						this.context.doMyTurn(myturn);
-						break;
-					} catch (IllegalTurnException e) {
-						System.err.println("KI wanted to do a invalid Turn! "
-								+ e.getMessage());
-					}
+				MoveMessageType myturn = spieler.doTurn(request);
+				try {
+					this.context.doMyTurn(myturn);
+				} catch (IllegalTurnException e) {
+					System.err.println("KI wanted to do a invalid Turn! "
+							+ e.getMessage());
 				}
 			}
 		} catch (GameHasEndedException e) {
