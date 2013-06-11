@@ -24,13 +24,14 @@ public class Position {
 		this.x=x;
 		this.y=y;
 	}
-
-	public PositionType getPositionType() {
+	public PositionType getPositionType(){
 		PositionType pt = new PositionType();
 		pt.setCol(x);
 		pt.setRow(y);
 		return pt;
 	}
+
+	
 	public String toString() {
 		return String.format("(%d, %d)",x,y);
 	}

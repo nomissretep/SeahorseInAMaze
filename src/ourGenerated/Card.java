@@ -104,70 +104,75 @@ public class Card {
 	 */
 	public boolean isSame(Card other) {
 		Card c = new Card(other);
-		for(int i=0;i<openings.length;i++){
+		for (int i = 0; i < openings.length; i++) {
 			c.turnCounterClockwise(1);
-			if(this.equals(c))
+			if (this.equals(c))
 				return true;
 		}
-		
-		
+
 		return false;
 	}
-	//			0	1	2	3	4	5	6	7	8	9	A	B	C	D	E	F
-	//U+255x	═	║	╒	╓	╔	╕	╖	╗	╘	╙	╚	╛	╜	╝	╞	╟
-	//U+256x	╠	╡	╢	╣	╤	╥	╦	╧	╨	╩	╪	╫	╬	
+
+	// 0 1 2 3 4 5 6 7 8 9 A B C D E F
+	// U+255x ═ ║ ╒ ╓ ╔ ╕ ╖ ╗ ╘ ╙ ╚ ╛ ╜ ╝ ╞ ╟
+	// U+256x ╠ ╡ ╢ ╣ ╤ ╥ ╦ ╧ ╨ ╩ ╪ ╫ ╬
 	public char getChar() {
-		if(openings[0] && openings[2]) {//Oben & unten offen
-			if(openings[1] && openings[3]) {//Alle offen{
+		if (openings[0] && openings[2]) {// Oben & unten offen
+			if (openings[1] && openings[3]) {// Alle offen{
 				return '╬';
-			} else if(openings[1]) { //Oben, rechts, unten offen
+			} else if (openings[1]) { // Oben, rechts, unten offen
 				return '╠';
-			} else if(openings[3]) {
+			} else if (openings[3]) {
 				return '╣';
 			} else {
 				return '║';
 			}
-		} else if(openings[0]) {//Oben aber nicht unten offen{
-			if(openings[1]) {// Oben und rechts, nicht unten
-				if(openings[3]) { //oben rechts links
+		} else if (openings[0]) {// Oben aber nicht unten offen{
+			if (openings[1]) {// Oben und rechts, nicht unten
+				if (openings[3]) { // oben rechts links
 					return '╩';
-				} else {	//oben rechts
+				} else { // oben rechts
 					return '╚';
 				}
-			} else { //Oben, nicht rechts, nicht unten
-				if(openings[3]) {//oben, links nicht rechts nicht unten
+			} else { // Oben, nicht rechts, nicht unten
+				if (openings[3]) {// oben, links nicht rechts nicht unten
 					return '╝';
 				} else {
 					return '╨';
 				}
 			}
-		} else if(openings[2]) { //Unten aber nicht oben offen
-			if(openings[1]) {// unten und rechts, nicht unten
-				if(openings[3]) { //unten rechts links
+		} else if (openings[2]) { // Unten aber nicht oben offen
+			if (openings[1]) {// unten und rechts, nicht unten
+				if (openings[3]) { // unten rechts links
 					return '╦';
-				} else {	//unten rechts
+				} else { // unten rechts
 					return '╔';
 				}
-			} else { //unten, nicht rechts, nicht unten
-				if(openings[3]) {//unten, links nicht rechts nicht unten
+			} else { // unten, nicht rechts, nicht unten
+				if (openings[3]) {// unten, links nicht rechts nicht unten
 					return '╗';
 				} else {
 					return '╥';
 				}
 			}
-		} else { //Weder oben noch unten offen
-			if(openings[1] && openings[3]) { //Rechts und links
+		} else { // Weder oben noch unten offen
+			if (openings[1] && openings[3]) { // Rechts und links
 				return '═';
-			} else if(openings[1]) {
+			} else if (openings[1]) {
 				return '╞';
-			} else if(openings[3]) {
+			} else if (openings[3]) {
 				return '╡';
-			} else { //Garkeine öffnung
+			} else { // Garkeine öffnung
 				return 'X';
 			}
 		}
 	}
+
 	public String toString() {
 		return ""+this.getChar()+" " + this.treasure + " " + this.players.toString();
+	}
+
+	public boolean[] getOpenings() {
+		return this.openings;
 	}
 }

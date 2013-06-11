@@ -84,6 +84,11 @@ public class Board {
 			foundTreasure = true;
 			treasurePosition = null;
 		}
+		
+		if(shiftCard.getPlayers().contains(id)){
+			foundMe=true;
+			myPosition=new Position(-1,-1);
+		}
 		if (!foundMe || !foundTreasure) {
 			System.out.println("Ungueltiges Brett");
 			throw new IllegalArgumentException("Something is wrong with that board...");
@@ -204,7 +209,7 @@ public class Board {
 	public Board shift(Position p, Card c) throws IllegalTurnException {
 		if (!isValidMove(p, c))
 			throw new IllegalTurnException(
-					"Es wurde kein gueltiger Zuge gefunden");
+					"Es wurde kein gueltiger Zug gefunden");
 		Board newBoard = new Board(this);
 		Card tmp=null;
 		int start = 0, direction = 0;
