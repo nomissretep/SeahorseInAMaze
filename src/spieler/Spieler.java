@@ -47,8 +47,7 @@ public abstract class Spieler implements ISpieler{
 		lastIdHasNTreasuresleft = idHasNTreasuresleft;
 		MoveMessageType moveMessage = doTurn(board, idHasNTreasuresleft);
 		if(moveMessage.getNewPinPos() == null) {
-			System.out.println("Don't want to move");
-			moveMessage.setNewPinPos(board.getMyPosition().getPositionType());
+			throw new RuntimeException("KI did not set new pin pos!");
 		}
 		return moveMessage;
 	}
