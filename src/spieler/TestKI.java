@@ -7,7 +7,6 @@ import generated.TreasuresToGoType;
 
 public class TestKI extends Spieler {
 
-	
 	ObjectFactory obf = new ObjectFactory();
 
 	@Override

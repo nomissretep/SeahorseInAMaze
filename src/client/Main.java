@@ -3,11 +3,12 @@ package client;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-import spieler.TestKI;
+import spieler.DecisionKI;
 
 public class Main {
 	public static final String defaultHostname = "localhost";
 	public static final int defaultPort = 5123;
+
 	public static void main(String args[]) throws UnknownHostException,
 			IOException {
 		String hostname;
@@ -20,15 +21,15 @@ public class Main {
 				showUsage();
 				return;
 			}
-		} else if(args.length == 1){
-			if(args[0].startsWith("-")) {
+		} else if (args.length == 1) {
+			if (args[0].startsWith("-")) {
 				showUsage();
 				return;
 			}
 			hostname = args[0];
 			port = defaultPort;
 			System.out.format("Using default-Port: %d\n", port);
-		} else if(args.length == 0){
+		} else if (args.length == 0) {
 			hostname = defaultHostname;
 			port = defaultPort;
 			showUsage();
@@ -38,11 +39,12 @@ public class Main {
 			return;
 		}
 		Client client = new Client(hostname, port);
-		client.run(new TestKI());
+		client.run(new DecisionKI());
 	}
-	
+
 	public static void showUsage() {
-		System.out.format("USAGE: [HOSTNAME=%s] [PORT=%d]\n", defaultHostname, defaultPort);
+		System.out.format("USAGE: [HOSTNAME=%s] [PORT=%d]\n", defaultHostname,
+				defaultPort);
 	}
 
 }

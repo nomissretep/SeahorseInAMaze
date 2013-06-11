@@ -67,7 +67,7 @@ public class ServerContext {
 				System.out.println("This is now very weird.");
 			}
 		}
-		return id;
+		return this.id;
 	}
 
 	public AwaitMoveMessageType waitForMyTurn() throws GameHasEndedException {

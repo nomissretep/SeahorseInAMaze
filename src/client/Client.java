@@ -26,9 +26,9 @@ public class Client {
 	public void run(ISpieler spieler) {
 		try {
 			int id;
-			id=context.login(spieler.getName());
+			id = this.context.login(spieler.getName());
 			spieler.setId(id);
-			
+
 		} catch (IOException e) {
 			System.out.println("Login fehlgeschlagen");
 			e.printStackTrace();
@@ -54,7 +54,8 @@ public class Client {
 				System.out.println("The Server does not like us. DISCONNECT: "
 						+ e.getFailPacket().getDisconnectMessage().getName());
 			} else {
-				System.out.println("Invalid Packet: " + e.getFailPacket().getMcType());
+				System.out.println("Invalid Packet: "
+						+ e.getFailPacket().getMcType());
 				throw e;
 			}
 		}
