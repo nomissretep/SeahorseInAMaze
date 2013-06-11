@@ -209,45 +209,45 @@ public class Board {
 		Card tmp=null;
 		int start = 0, direction = 0;
 		boolean vertikal = false;
-		if (p.x == 0) {// Karte wird oben eingefuegt
-			tmp = newBoard.cards[6][p.y];// die unterste Karte der Spalte
-			start = 0;
-			direction = 1;
-			vertikal = true;
-		} else if (p.x == 6) {// Karte wird unten eingefuegt
-			tmp = newBoard.cards[0][p.y];// die oberste Karte der Spalte
-			start = 6;
-			direction = -1;
-			vertikal = true;
-		} else if (p.y == 0) {// karte wird links eingefuegt
-			tmp = newBoard.cards[p.x][6];// die letzte Karte der Spalte
-			start = 0;
-			direction = 1;
-			vertikal = false;
-		} else if (p.y == 6) {
-			tmp = newBoard.cards[p.x][0];
+		if (p.x == 0) {// Karte wird links eingefuegt
+			tmp = newBoard.cards[p.y][6];// die rechteste Karte der Zeile
 			start = 6;
 			direction = -1;
 			vertikal = false;
+		} else if (p.x == 6) {// Karte wird rechts eingefuegt
+			tmp = newBoard.cards[p.y][0];// die linkeste Karte der Zeile
+			start = 0;
+			direction = 1;
+			vertikal = false;
+		} else if (p.y == 0) {// karte wird oben eingefuegt
+			tmp = newBoard.cards[6][p.x];// die letzte Karte der Spalte
+			start = 6;
+			direction = -1;
+			vertikal = true;
+		} else if (p.y == 6) { //karte wird unten eingefuegt
+			tmp = newBoard.cards[0][p.x]; //oberste karte der Spalte
+			start = 0;
+			direction = 1;
+			vertikal = true;
 		}
 		
 		for (int i = start; i <= 6 && i>=0 && i+direction<=6 && i+direction>=0; i += direction) {
 			if (vertikal) {
-				newBoard.cards[i][p.y]=newBoard.cards[i+direction][p.y];
+				newBoard.cards[i][p.x]=newBoard.cards[i+direction][p.x];
 			} else {
-				newBoard.cards[p.x][i]=newBoard.cards[p.x][i+direction];
+				newBoard.cards[p.y][i]=newBoard.cards[p.y][i+direction];
 			}
 		}
-		newBoard.cards[p.x][p.y]=new Card(shiftCard);
+		newBoard.cards[p.y][p.x]=new Card(shiftCard);
 		newBoard.shiftCard=tmp;
 		
 		for(int spieler: spielerPositions.keySet()) {
-			newBoard.spielerPositions.put(spieler, shiftPosition(spielerPositions.get(spieler), start, direction, vertikal));
+			newBoard.spielerPositions.put(spieler, shiftPosition(spielerPositions.get(spieler), vertikal?p.x:p.y, direction, vertikal));
 		}
-		newBoard.myPosition = shiftPosition(myPosition, start, direction, vertikal);
-		newBoard.treasurePosition = shiftPosition(treasurePosition, start, direction, vertikal);
+		newBoard.myPosition = shiftPosition(myPosition, vertikal?p.x:p.y, direction, vertikal);
+		newBoard.treasurePosition = shiftPosition(treasurePosition, vertikal?p.x:p.y, direction, vertikal);
 		//TODO: shift my & treasure position
-
+		newBoard.forbidden = p;
 		return newBoard;
 	}
 
@@ -264,26 +264,26 @@ public class Board {
 		return ( (p.x%6==0 && p.y%2==1)  || (p.y%6==0 && p.x%2==1) );
 	}
 	
-	private Position shiftPosition(Position p, int start, int direction, boolean vertical) {
+	private Position shiftPosition(Position p, int pos, int direction, boolean vertical) {
 		if(p == null) { //Karte ist aktuelle shift-karte => sie wird an der neuen stelle reingeschoben.
 			if(vertical) {
 				if(direction > 0) {
-					return new Position(0, start); 
+					return new Position(0, pos); 
 				} else {
-					return new Position(6, start); 
+					return new Position(6, pos); 
 				}
 			} else {
 				if(direction > 0) {
-					return new Position(start, 0); 
+					return new Position(pos, 0); 
 				} else {
-					return new Position(start, 6); 
+					return new Position(pos, 6); 
 				}
 			}
 		} else {
 			if(vertical) {
-				return new Position(p.x, p.y == start ? (7 + p.y + direction)%7 : p.y);
+				return new Position(p.x, p.x == pos ? (7 + p.y - direction)%7 : p.y);
 			} else {
-				return new Position(p.x == start ? (7 + p.x + direction)%7 : p.x, p.y);
+				return new Position(p.y == pos ? (7 + p.x - direction)%7 : p.x, p.y);
 			}
 		}
 	}
