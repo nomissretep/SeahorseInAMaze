@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import ourGenerated.Board;
+import ourGenerated.Card;
 import ourGenerated.Position;
 
 public abstract class Spieler implements ISpieler {
@@ -59,6 +60,28 @@ public abstract class Spieler implements ISpieler {
 			throw new RuntimeException("KI did not set new pin pos!");
 		}
 		return moveMessage;
+	}
+	
+	public List<Position> filterPositionsForTreasures(Board b, List<Position> positions) {
+		List<Position> positionsWithTreasures = new LinkedList<Position>();
+		Card cards[][] = b.getCards();
+		for(Position p: positions) {
+			if(cards[p.y][p.x].getTreasure() != null) {
+				positionsWithTreasures.add(p);
+			}
+		}
+		return positionsWithTreasures;
+	}
+	
+	public List<Position> filterPositionsForNotYetTakenTreasures(Board b, List<Position> positions) {
+		List<Position> positionsWithNotYetTakenTreasures = new LinkedList<Position>();
+		Card cards[][] = b.getCards();
+		for(Position p: positions) {
+			if(cards[p.y][p.x].getTreasure() != null && !alreadyFoundTreasures.contains(cards[p.y][p.x].getTreasure())) {
+				positionsWithNotYetTakenTreasures.add(p);
+			}
+		}
+		return positionsWithNotYetTakenTreasures;
 	}
 
 }
