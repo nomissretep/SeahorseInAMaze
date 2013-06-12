@@ -12,44 +12,63 @@ import assessment.IStrategie;
 import ourGenerated.Board;
 import ourGenerated.Card;
 import ourGenerated.Position;
+import spieler.strategies.DefaultStrategie;
+import spieler.strategies.ICanWinStrategie;
+import spieler.strategies.PreventEnemyFromWinningStrategie;
 
-public class StrategieKI extends Spieler{
+public class StrategieKI extends Spieler {
 
-	IStrategie strat;
-	public StrategieKI(IStrategie strat) {
-		this.strat = strat;
-	}
+	
 	@Override
-	public MoveMessageType doTurn(Board bt,
-			Map<Integer, Integer> idHasNTreasuresleft) {
+	public MoveMessageType doTurn(Board bt, Map<Integer, Integer> idHasNTreasuresleft) {
+		IStrategie strat;
+		currentMaxHigh = new High(0,0, Integer.MIN_VALUE);
+		if(idHasNTreasuresleft.get(this.id) == 1) {
+			//Das Spiel endet gleich
+			strat = new ICanWinStrategie();
+		} else if(idHasNTreasuresleft.values().contains(1)) {
+			//Jemand anderes braucht nur noch einen Schatz
+			strat = new PreventEnemyFromWinningStrategie();
+		} else {
+			strat = new DefaultStrategie();
+		}
+		
 		Card c = bt.getShiftCard();
-		for (int rotation = 0; rotation < 4; ++rotation) {
-			for(int i = 5; i > 0; i-=2) {
-				tryShift(bt, new Position(i, 0), c, rotation);
-				tryShift(bt, new Position(i, 6), c, rotation);
-				tryShift(bt, new Position(0, i), c, rotation);
-				tryShift(bt, new Position(6, i), c, rotation);
+		for(int rotationCount = 0; rotationCount<4; ++rotationCount) {
+			for(int x = 5; x >= 0; x-=2) {
+				versuche(strat, bt, x, 0, c, rotationCount);
+				versuche(strat, bt, x, 6, c, rotationCount);
+			}
+			for(int y = 5; y >= 0; y-=2) {
+				versuche(strat, bt, 0, y, c, rotationCount);
+				versuche(strat, bt, 6, y, c, rotationCount);
 			}
 			c.turnCounterClockwise(1);
 		}
+		
 		return null;
 	}
-
-	private void tryShift(Board bt, Position shiftPos, Card c,
-			int rotation) {
-		Board shiftetBoard;
+	
+	High currentMaxHigh = new High(0,0, Integer.MIN_VALUE);
+	int currentMaxX, currentMaxY, currentMaxRotationCount;
+	private void versuche(IStrategie strat, Board bt, int x, int y, Card c, int rotationCount) {
 		try {
-			shiftetBoard = bt.shift(shiftPos, c);
+			High h = strat.bewerte(bt.shift(new Position(x,y), c));
+			if(h.value > currentMaxHigh.value) {
+				currentMaxHigh = h;
+				currentMaxX=x;
+				currentMaxY=y;
+				currentMaxRotationCount = rotationCount;
+			}
 		} catch (IllegalTurnException e) {
-			return;
+			System.out.println("IllegalTurn");
 		}
-		High h = strat.bewerte(shiftetBoard);
 		
 	}
+
 	@Override
 	public String getName() {
 		return "Strategic Seahorse";
 	}
-
 
 }
