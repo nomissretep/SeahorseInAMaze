@@ -59,6 +59,12 @@ public abstract class Spieler implements ISpieler {
 		if (moveMessage.getNewPinPos() == null) {
 			throw new RuntimeException("KI did not set new pin pos!");
 		}
+		if(moveMessage.getNewPinPos().equals(board.shiftCardPosition(new Position(moveMessage.getShiftPosition()), board.getTreasurePosition()))) {
+			//Wir stehen auf unserer SchatzKarte => Diese wird im nächsten Zug weg sein.
+			if(!this.alreadyFoundTreasures.contains(board.getTreasure())) {
+				this.alreadyFoundTreasures.add(board.getTreasure());
+			}
+		}
 		return moveMessage;
 	}
 	

@@ -395,4 +395,24 @@ public class Board {
 		}
 	}
 
+	public Object shiftCardPosition(Position shiftPosition,	Position treasurePosition) {
+		boolean vertikal = false;
+		int direction;
+		if (shiftPosition.x == 0) {// Karte wird links eingefuegt
+			direction = -1;
+			vertikal = false;
+		} else if (shiftPosition.x == 6) {// Karte wird rechts eingefuegt
+			direction = 1;
+			vertikal = false;
+		} else if (shiftPosition.y == 0) {// karte wird oben eingefuegt
+			direction = -1;
+			vertikal = true;
+		} else if (shiftPosition.y == 6) { // karte wird unten eingefuegt
+			direction = 1;
+			vertikal = true;
+		} else {
+			throw new IllegalArgumentException();
+		}
+		return shiftCardPosition(treasurePosition, vertikal ? shiftPosition.x : shiftPosition.y, direction, vertikal);
+	}
 }
