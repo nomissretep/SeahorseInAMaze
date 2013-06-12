@@ -3,7 +3,7 @@ package assessment;
 import ourGenerated.Position;
 
 	public class High{
-		public Position pos;
+		public final Position pos;
 		int value;
 		
 		High()
