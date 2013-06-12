@@ -46,7 +46,12 @@ public class StrategieKI extends Spieler {
 			c.turnCounterClockwise(1);
 		}
 		
-		return null;
+		c.turnCounterClockwise(currentMaxRotationCount);
+		MoveMessageType move = new MoveMessageType();
+		move.setNewPinPos(currentMaxHigh.pos.getPositionType());
+		move.setShiftCard(c.getCardType());
+		move.setShiftPosition(new Position(currentMaxX, currentMaxY).getPositionType());
+		return move;
 	}
 	
 	High currentMaxHigh = new High(0,0, Integer.MIN_VALUE);
