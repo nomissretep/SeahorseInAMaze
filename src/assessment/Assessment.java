@@ -21,11 +21,11 @@ public class Assessment {
 		int y=pos.y;
 		int[][] weights=new int[7][7];
 		int iw;
-		int j;
-		for(int i=0;i<7;i++){
-			iw=100-(i-x)*(i-x);
-			for(j=0;j<7;j++)
-				weights[i][j]=iw-(j-y)*(j-y);
+		int x_;
+		for(int y_=0;y_<7;y_++){
+			iw=100-(y_-x)*(y_-x);
+			for(x_=0;x_<7;x_++)
+				weights[y_][x_]=iw-(x_-y)*(x_-y);
 		}
 		return weights;
 	}
@@ -34,10 +34,10 @@ public class Assessment {
 	{
 		Card[][] Cards=board.getCards();
 		boolean karten[][]=new boolean[7][7];
-		for(int i=0;i<7;i++)
-			for(int j=0;j<7;j++)
-				if(Cards[i][j].getTreasure().value().contains("sym"))
-					karten[i][j]=true;				
+		for(int y=0;y<7;y++)
+			for(int x=0;x<7;x++)
+				if(Cards[y][x].getTreasure() != null)
+					karten[y][x]=true;				
 		return karten;
 	}
 	

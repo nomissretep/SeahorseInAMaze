@@ -5,12 +5,12 @@ import ourGenerated.Position;
 public class Assessmentfield {
 	public static int[][] and(boolean a[][],boolean b[][])
 	{
-		int j;
+		int x;
 		int c[][]=new int[7][7];
-		for(int i=0;i<7;i++)
-			for(j=0;j<7;j++)
-				if(a[i][j]&&b[i][j])
-					c[i][j]=1;
+		for(int y=0;y<7;y++)
+			for(x=0;x<7;x++)
+				if(a[y][x]&&b[y][x])
+					c[y][x]=1;
 		return c;
 	}
 	
@@ -19,22 +19,22 @@ public class Assessmentfield {
 	
 	public static int[][] mult(boolean a[][],int b[][],int alpha)
 	{
-		int j;
+		int x;
 		int c[][]=new int[7][7];
-		for(int i=0;i<7;i++)
-			for(j=0;j<7;j++)
-				if(a[i][j])
-					c[i][j]=alpha*b[i][j];
+		for(int y=0;y<7;y++)
+			for(x=0;x<7;x++)
+				if(a[y][x])
+					c[y][x]=alpha*b[y][x];
 		return c;
 	}
 	
 	public static int[][] mult(int a[][],int b[][],int alpha)
 	{
-		int j;
+		int x;
 		int c[][]=new int[7][7];
-		for(int i=0;i<7;i++)
-			for(j=0;j<7;j++)
-				c[i][j]=alpha*(b[i][j]*a[i][j]);
+		for(int y=0;y<7;y++)
+			for(x=0;x<7;x++)
+				c[y][x]=alpha*(b[y][x]*a[y][x]);
 		return c;
 	}
 	
@@ -42,13 +42,20 @@ public class Assessmentfield {
 	public static int[][] add(int a[][],int b[][])
 	{return add(a,b,1);}
 	
+	/**
+	 * returns an array, so that alpha*(a+b)
+	 * @param a
+	 * @param b
+	 * @param alpha
+	 * @return
+	 */
 	public static int[][] add(int a[][],int b[][],int alpha)
 	{
-		int j;
+		int x;
 		int c[][]=new int[7][7];
-		for(int i=0;i<7;i++)
-			for(j=0;j<7;j++)
-				c[i][j]=alpha*(b[i][j]+a[i][j]);
+		for(int y=0;y<7;y++)
+			for(x=0;x<7;x++)
+				c[y][x]=alpha*(b[y][x]+a[y][x]);
 		return c;
 	}
 	
@@ -57,38 +64,38 @@ public class Assessmentfield {
 	
 	
 	
-	public static int cound(boolean a[][])
+	public static int count(boolean a[][])
 	{
-		int j;
+		int x;
 		int c=0;
-		for(int i=0;i<7;i++)
-			for(j=0;j<7;j++)
-				if(a[i][j])
+		for(int y=0;y<7;y++)
+			for(x=0;x<7;x++)
+				if(a[y][x])
 					c++;
 		return c;
 	}
 	
-	public static int cound(int a[][])
+	public static int count(int a[][])
 	{
-		int j;
+		int x;
 		int c=0;
-		for(int i=0;i<7;i++)
-			for(j=0;j<7;j++)
-				if(a[i][j]>0)
+		for(int y=0;y<7;y++)
+			for(x=0;x<7;x++)
+				if(a[y][x]>0)
 					c++;
 		return c;
 	}
 	
 	public static int[][] higherField(int a[][],int b[][])
 	{
-		int j;
+		int x;
 		int c[][]=new int[7][7];
-		for(int i=0;i<7;i++)
-			for(j=0;j<7;j++){
-				if(a[i][j]>b[i][j])
-					c[i][j]=a[i][j];
+		for(int y=0;y<7;y++)
+			for(x=0;x<7;x++){
+				if(a[y][x]>b[y][x])
+					c[y][x]=a[y][x];
 				else
-					c[i][j]=b[i][j];
+					c[y][x]=b[y][x];
 			}
 		return c;
 	}
@@ -96,11 +103,11 @@ public class Assessmentfield {
 	public static High findHigh(int[][] field)
 	{
 		High high = new High();
-		int j;
-		for(int i=0;i<7;i++)
-			for(j=0;j<7;j++)
-				if(field[i][j]>high.value)
-					high=new High(i,j,field[i][j]);
+		int x;
+		for(int y=0;y<7;y++)
+			for(x=0;x<7;x++)
+				if(field[y][x]>high.value)
+					high=new High(x,y,field[y][x]);
 		return high;
 	}
 	
