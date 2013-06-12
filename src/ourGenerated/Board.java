@@ -258,18 +258,63 @@ public class Board {
 		newBoard.cards[p.y][p.x] = new Card(this.shiftCard);
 		newBoard.shiftCard = tmp;
 
+		//Die Rausgeschobenen kommen wieder aufs board.
+		newBoard.cards[p.y][p.x].getPlayers().clear();
+		newBoard.cards[p.y][p.x].getPlayers().addAll(newBoard.shiftCard.getPlayers());
+		newBoard.shiftCard.getPlayers().clear();
+		
+
 		for (int spieler : this.spielerPositions.keySet()) {
-			newBoard.spielerPositions.put(spieler, this.shiftPosition(
+			newBoard.spielerPositions.put(spieler, this.shiftPlayerPosition(
 					this.spielerPositions.get(spieler), vertikal ? p.x : p.y,
 					direction, vertikal));
 		}
-		newBoard.myPosition = this.shiftPosition(this.myPosition,
+		newBoard.myPosition = this.shiftPlayerPosition(this.myPosition,
 				vertikal ? p.x : p.y, direction, vertikal);
-		newBoard.treasurePosition = this.shiftPosition(this.treasurePosition,
+		newBoard.treasurePosition = this.shiftCardPosition(this.treasurePosition,
 				vertikal ? p.x : p.y, direction, vertikal);
 		// TODO: shift my & treasure position
-		newBoard.forbidden = p;
+		if(vertikal) {
+			newBoard.forbidden = new Position(p.x ,(p.y + 6) % 12);
+		} else {
+			newBoard.forbidden = new Position((p.x + 6) % 12, p.y);
+		}
+		
 		return newBoard;
+	}
+
+	private Position shiftCardPosition(Position p, int pos,
+			int direction, boolean vertikal) {
+		if (p == null) { // Karte ist aktuelle shift-karte => sie wird an der
+			// neuen stelle reingeschoben.
+			if (vertikal) {
+				if (direction > 0) {
+					return new Position(0, pos);
+				} else {
+					return new Position(6, pos);
+				}
+			} else {
+				if (direction > 0) {
+					return new Position(pos, 0);
+				} else {
+					return new Position(pos, 6);
+				}
+			}
+		} else {
+			if (vertikal) {
+				if(p.x == pos && (p.y + direction >=7 || p.y + direction < 0)) { //Karte wird rausgeschoben 
+					return null;
+				} else {
+					return new Position(p.x, p.x == pos ? (7 + p.y - direction) % 7	: p.y);
+				}
+			} else {
+				if(p.y == pos && (p.x + direction >=7 || p.x + direction < 0)) {  //Karte wird rausgeschoben
+					return null;
+				} else {
+					return new Position(p.y == pos ? (7 + p.x - direction) % 7 : p.x, p.y);
+				}
+			}
+		}
 	}
 
 	public boolean isValidMove(Position p, Card c) {
@@ -285,23 +330,10 @@ public class Board {
 		return ((p.x % 6 == 0 && p.y % 2 == 1) || (p.y % 6 == 0 && p.x % 2 == 1));
 	}
 
-	private Position shiftPosition(Position p, int pos, int direction,
+	private Position shiftPlayerPosition(Position p, int pos, int direction,
 			boolean vertical) {
-		if (p == null) { // Karte ist aktuelle shift-karte => sie wird an der
-							// neuen stelle reingeschoben.
-			if (vertical) {
-				if (direction > 0) {
-					return new Position(0, pos);
-				} else {
-					return new Position(6, pos);
-				}
-			} else {
-				if (direction > 0) {
-					return new Position(pos, 0);
-				} else {
-					return new Position(pos, 6);
-				}
-			}
+		if (p == null) { 
+			throw new IllegalArgumentException("Player position can not be null");
 		} else {
 			if (vertical) {
 				return new Position(p.x, p.x == pos ? (7 + p.y - direction) % 7
