@@ -1,9 +1,11 @@
 package assessment;
 
 import ourGenerated.Board;
+import ourGenerated.Position;
 
 public class Strategie {
 
+	High high;
 	Strategie(Board board)
 	{
 		Assessment as=new Assessment(board);
@@ -17,12 +19,24 @@ public class Strategie {
 		int[][]tposible=Assessmentfield.mult(iGo,tadd);
 		High h=Assessmentfield.findHigh(tposible);
 		
+		
+		
 		int filds=Assessmentfield.cound(iGo);
 		int traeses=Assessmentfield.cound(Assessmentfield.and(iGo,t));
 		
-		h.value+=10*filds+traeses;
+		h.value+=filds+10*traeses;
+		
+		Position gegner=board.getSpielerPositions().values().iterator().next();
+		
+		boolean[][] gway=as.whereToGo(gegner);
+		int gtraeses=Assessmentfield.cound(Assessmentfield.and(gway,t));
+		h.value=h.value*10+(24-gtraeses);
 		
 		
 	}
 	
+	public int getValue()
+	{return high.value;}
+	public Position getPosition()
+	{return high.pos;}
 }
