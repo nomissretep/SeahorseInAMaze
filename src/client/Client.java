@@ -49,6 +49,9 @@ public class Client {
 		} catch (GameHasEndedException e) {
 			System.out.println("The Game has ended Winner: "
 					+ e.getWinMessage().getWinner().getId());
+			if(spieler.getId() == e.getWinMessage().getWinner().getId()) {
+				System.out.println("THATS ME!!!");
+			}
 		} catch (RecievedWrongTypeException e) {
 			if (e.getFailPacket().getMcType().equals(MazeComType.DISCONNECT)) {
 				System.out.println("The Server does not like us. DISCONNECT: "
