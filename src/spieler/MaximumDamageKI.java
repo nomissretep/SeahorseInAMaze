@@ -14,6 +14,7 @@ public class MaximumDamageKI extends Spieler {
 
 	double currentAverageMin;
 	Position minShiftPosition;
+	Position minPinPosition;
 	int minRotation;
 
 	ObjectFactory obf = new ObjectFactory();
@@ -38,7 +39,7 @@ public class MaximumDamageKI extends Spieler {
 		c.turnCounterClockwise(this.minRotation);
 		mmt.setShiftCard(c.getCardType());
 		mmt.setShiftPosition(this.minShiftPosition.getPositionType());
-
+		mmt.setNewPinPos(minPinPosition.getPositionType());
 		return mmt;
 	}
 
@@ -64,6 +65,7 @@ public class MaximumDamageKI extends Spieler {
 			this.currentAverageMin = average;
 			this.minShiftPosition = shiftPosition;
 			this.minRotation = rotation;
+			this.minPinPosition = shiftetBoard.getMyPosition();
 			System.out.println("New Min: " + this.currentAverageMin + "\n"
 					+ this.minShiftPosition + ":" + this.minRotation);
 		}
