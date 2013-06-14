@@ -36,17 +36,10 @@ public class XmlInStream extends UTFInputStream {
 		MazeCom result = null;
 		try {
 			String xml = this.readUTF8();
-			// TODO entfernen
-			System.out.println("Empfangen");
-
 			bytes = xml.getBytes();
 			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 
 			result = (MazeCom) this.unmarshaller.unmarshal(bais);
-			if (!result.getMcType().equals(MazeComType.AWAITMOVE)) {
-				System.out.println(xml);
-				// TODO entferne Aufgabe
-			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 			System.err
