@@ -87,10 +87,6 @@ public class Board {
 			this.treasurePosition = null;
 		}
 
-		if (this.shiftCard.getPlayers().contains(id)) {
-			foundMe = true;
-			this.myPosition = new Position(-1, -1);
-		}
 		if (!foundMe || !foundTreasure) {
 			System.out.println("Ungueltiges Brett");
 			throw new IllegalArgumentException(
@@ -132,6 +128,7 @@ public class Board {
 	}
 
 	public List<Position> getPossiblePositionsFromPosition(Position position) {
+		//canVisit is actually used as a Queue. 
 		int canVisit[] = new int[7 * 7];
 		int canVisitSize = 0;
 		int haveRevisited = 0;
@@ -153,15 +150,13 @@ public class Board {
 				visited[currentIndex - 7] = true;
 			}
 
-			if (x < 7 - 1 && !visited[currentIndex + 1]
-					&& currentCardOpenings[1]
+			if (x < 6 && !visited[currentIndex + 1]	&& currentCardOpenings[1]
 					&& this.cards[y][x + 1].openings[3]) { // Rechts
 				canVisit[canVisitSize++] = (currentIndex + 1);
 				visited[currentIndex + 1] = true;
 			}
 
-			if (y < 7 - 1 && !visited[currentIndex + 7]
-					&& currentCardOpenings[2]
+			if (y < 6 && !visited[currentIndex + 7]	&& currentCardOpenings[2]
 					&& this.cards[y + 1][x].openings[0]) { // Unten
 				canVisit[canVisitSize++] = (currentIndex + 7);
 				visited[currentIndex + 7] = true;
@@ -179,6 +174,75 @@ public class Board {
 			list.add(new Position(canVisit[i] % 7, canVisit[i] / 7));
 		}
 		return list;
+	}
+	
+	
+	public int[][] howManyWallsBlockMyWayTo(Position position) {
+		//canVisit is actually used as a Queue. 
+		int walls[][] = new int[7][7];
+		for(int y = 7 - 1; y >= 0; --y) {
+			for(int x = 7 - 1; x >= 0; --x) {
+				walls[y][x] = Integer.MAX_VALUE;
+			}
+		}
+		int currentIndex = position.y * 7 + position.x;
+		walls[position.y][position.x] = 0;
+		int x, y;
+		boolean[] currentCardOpenings;
+		boolean[] visited = new boolean[7 * 7];
+		int didVisitAllFromEndTo = visited.length - 1;
+		int currentWalls;
+		int currentWallsAdd;
+		while (currentIndex >=  0) {
+			x = currentIndex % 7;
+			y = currentIndex / 7;
+			currentWalls = walls[y][x];
+			currentCardOpenings = this.cards[y][x].openings;
+			
+			if (y > 0) { // Oben
+				currentWallsAdd = (currentCardOpenings[0] ? 0 : 1) + (this.cards[y - 1][x].openings[2] ? 0 : 1);
+				if(walls[y - 1][x] > currentWalls + currentWallsAdd) {
+					walls[y - 1][x] = currentWalls + currentWallsAdd;
+				}
+			}
+
+			if (x < 7 - 1) { // Rechts
+				currentWallsAdd = (currentCardOpenings[1] ? 0 : 1) + (this.cards[y][x + 1].openings[3] ? 0 : 1);
+				if(walls[y][x + 1] > currentWalls + currentWallsAdd) {
+					walls[y][x + 1] = currentWalls + currentWallsAdd;
+				}
+			}
+
+			if (y < 7 - 1) { // Unten
+				currentWallsAdd = (currentCardOpenings[2] ? 0 : 1) + (this.cards[y + 1][x].openings[0] ? 0 : 1);
+				if(walls[y + 1][x] > currentWalls + currentWallsAdd) {
+					walls[y + 1][x] = currentWalls + currentWallsAdd;
+				}
+			}
+
+			if (x > 0) { // Links
+				currentWallsAdd = (currentCardOpenings[3] ? 0 : 1) + (this.cards[y][x - 1].openings[1] ? 0 : 1);
+				if(walls[y][x - 1] > currentWalls + currentWallsAdd) {
+					walls[y][x - 1] = currentWalls + currentWallsAdd;
+				}
+			}
+			visited[currentIndex] = true;
+			currentIndex = -1;
+			currentWalls = Integer.MAX_VALUE;
+			
+			while(didVisitAllFromEndTo >= 0 && visited[didVisitAllFromEndTo]) {
+				--didVisitAllFromEndTo;
+			}
+			for(int i = didVisitAllFromEndTo; i >= 0; --i ) {
+				if(i>=0 && !visited[i]) {
+					if(walls[i/7][i%7] < currentWalls) {
+						currentWalls = walls[i/7][i%7];
+						currentIndex = i;
+					}
+				}
+			}
+		}
+		return walls;
 	}
 
 	public Board(Board b) {
