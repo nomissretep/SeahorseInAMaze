@@ -283,7 +283,7 @@ public class Board {
 		return newBoard;
 	}
 
-	private Position shiftCardPosition(Position p, int pos,
+	public Position shiftCardPosition(Position p, int pos,
 			int direction, boolean vertikal) {
 		if (p == null) { // Karte ist aktuelle shift-karte => sie wird an der
 			// neuen stelle reingeschoben.
@@ -330,7 +330,7 @@ public class Board {
 		return ((p.x % 6 == 0 && p.y % 2 == 1) || (p.y % 6 == 0 && p.x % 2 == 1));
 	}
 
-	private Position shiftPlayerPosition(Position p, int pos, int direction,
+	public Position shiftPlayerPosition(Position p, int pos, int direction,
 			boolean vertical) {
 		if (p == null) { 
 			throw new IllegalArgumentException("Player position can not be null");
@@ -385,7 +385,7 @@ public class Board {
 				}
 				if (this.forbidden != null && x == this.forbidden.x
 						&& y == this.forbidden.y) {
-					style += ",bg_red,white";
+					style += ",bg_red";
 				}
 				AnsiConsole.out.print(AnsiRenderer.render(style + " "
 						+ this.cards[y][x].getChar() + "|@"));
@@ -393,6 +393,9 @@ public class Board {
 			}
 			AnsiConsole.out.println();
 		}
+	}
+	public void clearForbidden() {
+		this.forbidden = null;
 	}
 
 	public Object shiftCardPosition(Position shiftPosition,	Position treasurePosition) {
@@ -414,5 +417,10 @@ public class Board {
 			throw new IllegalArgumentException();
 		}
 		return shiftCardPosition(treasurePosition, vertikal ? shiftPosition.x : shiftPosition.y, direction, vertikal);
+	}
+
+	public void setMyPosition(Position position) {
+		myPosition = position;
+		
 	}
 }
