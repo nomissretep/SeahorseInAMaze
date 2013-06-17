@@ -112,10 +112,12 @@ public class MatthiasKI extends Spieler {
 	private void versuche(Board bt, int x, int y, Card c, int rotationCount) {
 		Position shiftPosition = new Position(x, y);
 		Board shiftetBoard;
+		
+		if(!bt.isValidMove(shiftPosition, c)) return;
 		try {
 			shiftetBoard = bt.shift(shiftPosition, c);
 		} catch (IllegalTurnException e) {
-			return;
+			throw new RuntimeException("This should not have happened ever.");
 		}
 		Position myPos = shiftetBoard.myPosition();
 		Position treasurePos = shiftetBoard.getTreasurePosition();
