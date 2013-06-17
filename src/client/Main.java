@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 import spieler.DecisionKI;
 import spieler.ISpieler;
@@ -63,6 +64,7 @@ public class Main {
 		int won = 0;
 		int lost = 0;
 		int error = 0;
+		Random rand = new Random();
 		for(int i =0; i< howOften; i++) {
 			try {
 				ki = tryToLoadSpieler(args[0]); //this should not fail, because it worked the first time
@@ -77,12 +79,12 @@ public class Main {
 				t.printStackTrace();
 				error++;
 			}
-			System.out.format("Statistic after %d/%d games: \n",won+lost+error, howOften);
+			System.out.format("Statistic after %d/%d games: \n",i + 1, howOften);
 			System.out.format("%5s %5s %5s\n", "won", "lost", "error");
 			System.out.format("%5d %5d %5d\n", won, lost , error);
 			if(i + 1 < howOften) {
 				try {
-					Thread.sleep(3000);
+					Thread.sleep(1000 + rand.nextInt(4000));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
