@@ -23,7 +23,7 @@ public class Client {
 		this.context = new ServerContext(s);
 	}
 
-	public void run(ISpieler spieler) {
+	public boolean run(ISpieler spieler) {
 		try {
 			int id;
 			id = this.context.login(spieler.getName());
@@ -52,11 +52,14 @@ public class Client {
 					e.getWinMessage().getWinner().getValue());
 			if(spieler.getId() == e.getWinMessage().getWinner().getId()) {
 				System.out.println("THATS ME!!!");
+				return true;
 			}
+			return false;
 		} catch (RecievedWrongTypeException e) {
 			if (e.getFailPacket().getMcType().equals(MazeComType.DISCONNECT)) {
 				System.out.println("The Server does not like us. DISCONNECT: "
 						+ e.getFailPacket().getDisconnectMessage().getName());
+				throw e;
 			} else {
 				System.out.println("Invalid Packet: "
 						+ e.getFailPacket().getMcType());
