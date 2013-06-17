@@ -42,6 +42,7 @@ public abstract class Spieler implements ISpieler {
 		board.outputPretty();
 		TreeMap<Integer, Integer> idHasNTreasuresleft = new TreeMap<Integer, Integer>();
 		for (TreasuresToGoType ttgt : awaitMoveMessageType.getTreasuresToGo()) {
+			System.out.println("Spieler " + ttgt.getPlayer() + " braucht noch " + ttgt.getTreasures());
 			idHasNTreasuresleft.put(ttgt.getPlayer(), ttgt.getTreasures());
 			if (this.lastIdHasNTreasuresleft != null) {
 				if (ttgt.getTreasures() < this.lastIdHasNTreasuresleft.get(ttgt
@@ -57,6 +58,7 @@ public abstract class Spieler implements ISpieler {
 				}
 			}
 		}
+
 		this.lastIdHasNTreasuresleft = idHasNTreasuresleft;
 		MoveMessageType moveMessage = this.doTurn(board, idHasNTreasuresleft);
 		if (moveMessage.getNewPinPos() == null) {
