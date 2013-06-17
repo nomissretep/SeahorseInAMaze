@@ -74,17 +74,17 @@ public class Main {
 					lost++;
 				}
 				if(i + 1 < howOften) {
-					Thread.sleep(1);
+					Thread.sleep(1000);
 				}
 				
 			} catch(Throwable t) {
 				t.printStackTrace();
 				error++;
 			}
+			System.out.format("Statistic after %d/%d games: \n",won+lost+error, howOften);
+			System.out.format("%5s %5s %5s\n", "won", "lost", "error");
+			System.out.format("%5d %5d %5d\n", won, lost , error);
 		}
-		System.out.println("Overall Statistic: ");
-		System.out.format("%5s %5s %5s\n", "won", "lost", "error");
-		System.out.format("%5d %5d %5d\n", won, lost , error);
 	}
 
 	public static void showUsage() {
