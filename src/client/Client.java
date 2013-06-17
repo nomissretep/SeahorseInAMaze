@@ -47,8 +47,9 @@ public class Client {
 				}
 			}
 		} catch (GameHasEndedException e) {
-			System.out.println("The Game has ended Winner: "
-					+ e.getWinMessage().getWinner().getId());
+			System.out.format("The Game has ended Winner: %d %s\n",
+					e.getWinMessage().getWinner().getId(),
+					e.getWinMessage().getWinner().getValue());
 			if(spieler.getId() == e.getWinMessage().getWinner().getId()) {
 				System.out.println("THATS ME!!!");
 			}
