@@ -281,7 +281,7 @@ public class Board {
 	 * @return
 	 */
 	public Board shift(Position p, Card c) throws IllegalTurnException {
-		if (!this.isValidMove(p, c)) {
+		if (!this.isValidMove(p, c, true)) {
 			throw new IllegalTurnException(
 					"Es wurde kein gueltiger Zug gefunden");
 		}
@@ -381,13 +381,16 @@ public class Board {
 		}
 	}
 
-	public boolean isValidMove(Position p, Card c) {
+	public boolean isValidMove(Position p, Card c) { 
+		return isValidMove(p, c, false);
+	}
+	public boolean isValidMove(Position p, Card c, boolean printError) {
 		if (!c.isSame(this.shiftCard)) {
-			System.err.println("Shiftcard is not the same.");
+			if (printError) System.err.println("Shiftcard is not the same.");
 			return false;
 		}
 		if (p.equals(this.forbidden)) {
-			System.err.println("Forbidden Position used.");
+			if (printError) System.err.println("Forbidden Position used.");
 			return false;
 		}
 
