@@ -73,10 +73,6 @@ public class Main {
 				} else {
 					lost++;
 				}
-				if(i + 1 < howOften) {
-					Thread.sleep(1000);
-				}
-				
 			} catch(Throwable t) {
 				t.printStackTrace();
 				error++;
@@ -84,6 +80,13 @@ public class Main {
 			System.out.format("Statistic after %d/%d games: \n",won+lost+error, howOften);
 			System.out.format("%5s %5s %5s\n", "won", "lost", "error");
 			System.out.format("%5d %5d %5d\n", won, lost , error);
+			if(i + 1 < howOften) {
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
