@@ -34,6 +34,7 @@ public class Client {
 			e.printStackTrace();
 		}
 
+		int zuege = 0;
 		try {
 
 			while (true) {// Der Ablauf des Programms
@@ -41,12 +42,14 @@ public class Client {
 				MoveMessageType myturn = spieler.doTurn(request);
 				try {
 					this.context.doMyTurn(myturn);
+					zuege++;
 				} catch (IllegalTurnException e) {
 					System.err.println("KI wanted to do a invalid Turn! "
 							+ e.getMessage());
 				}
 			}
 		} catch (GameHasEndedException e) {
+			System.out.format("Spiel dauerte %d Zuege.\n", zuege);
 			System.out.format("The Game has ended Winner: %d %s\n",
 					e.getWinMessage().getWinner().getId(),
 					e.getWinMessage().getWinner().getValue());
