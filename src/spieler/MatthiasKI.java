@@ -94,12 +94,16 @@ public class MatthiasKI extends Spieler {
 			}
 			c.turnCounterClockwise(1);
 		}
-		
+		System.out.println(currentMaxBewertung);
+		System.out.format("Selecting Shift Position & Card Rotation from %d possibilities\n", currentMaxZuege.size());
 		Zug z = currentMaxZuege.get(currentMaxZuege.size() == 1 ? 0 : rand.nextInt(currentMaxZuege.size()));
 		c.turnCounterClockwise(z.cardRotation);
 		MoveMessageType move = new MoveMessageType();
+		
 		move.setShiftPosition(z.shitPosition.getPositionType());
 		move.setShiftCard(c.getCardType());
+		
+		System.out.format("Selecting New Pin Pos from %d possibilities\n", z.movePositions.size());
 		move.setNewPinPos(z.movePositions.get(z.movePositions.size() ==1? 0 : rand.nextInt(z.movePositions.size())).getPositionType());
 		System.out.println(currentMaxBewertung);
 		return move;
@@ -150,7 +154,11 @@ public class MatthiasKI extends Spieler {
 			movePositions.add(treasurePos);
 		}
 		
-		int myNetworkSize = whereCanIGo.size();
+		int playersInMyNetwork = 0;
+		for(Position p: whereCanIGo) {
+			playersInMyNetwork += shiftetBoard.getCards()[p.y][p.x].getPlayers().size();
+		}
+		int myNetworkSize = whereCanIGo.size()/playersInMyNetwork;
 		
 		int enemysCanMoveTiles = 0;
 		for(Position pos: shiftetBoard.getSpielerPositions().values()) {
@@ -160,11 +168,10 @@ public class MatthiasKI extends Spieler {
 		
 		Bewertung b = new Bewertung(canFindTreasure, howManyWallsBlockMyWayToTreasure, averageEnemyMovability, myNetworkSize);
 		if(b.compareTo(currentMaxBewertung) > 0) {
-			System.out.println(b);
+			//System.out.println(b);
 			currentMaxZuege.clear();
 		}
 		if(b.compareTo(currentMaxBewertung) >= 0) {
-			System.out.println("+1");
 //			shiftetBoard.outputPretty();
 //			System.out.println("Walls: ");
 //			for(int y_=0; y_ < 7; y_++) {
