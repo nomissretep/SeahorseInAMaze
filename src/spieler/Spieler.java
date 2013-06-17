@@ -42,7 +42,8 @@ public abstract class Spieler implements ISpieler {
 		board.outputPretty();
 		TreeMap<Integer, Integer> idHasNTreasuresleft = new TreeMap<Integer, Integer>();
 		for (TreasuresToGoType ttgt : awaitMoveMessageType.getTreasuresToGo()) {
-			System.out.println("Spieler " + ttgt.getPlayer() + " braucht noch " + ttgt.getTreasures());
+			System.out.print("Spieler " + ttgt.getPlayer() + " braucht noch " + ttgt.getTreasures());
+			System.out.println(ttgt.getPlayer() == this.id ? "<" : "");
 			idHasNTreasuresleft.put(ttgt.getPlayer(), ttgt.getTreasures());
 			if (this.lastIdHasNTreasuresleft != null) {
 				if (ttgt.getTreasures() < this.lastIdHasNTreasuresleft.get(ttgt
