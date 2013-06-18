@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.Random;
 
 import spieler.DecisionKI;
@@ -50,6 +51,11 @@ public class Main {
 		if(args.length == 4) {
 			try {
 				howOften = Integer.parseInt(args[3]);
+				if(howOften <= 0) {
+					System.out.println("Please use a natural number for the number of games");
+					showUsage();
+					return;
+				}
 			} catch (NumberFormatException e) {
 				System.out.println(args[3]+" is not a number");
 				showUsage();
@@ -79,6 +85,7 @@ public class Main {
 				t.printStackTrace();
 				error++;
 			}
+			WinStatistics.printStatistic();
 			System.out.format("Statistic after %d/%d games: \n",i + 1, howOften);
 			System.out.format("%5s %5s %5s\n", "won", "lost", "error");
 			System.out.format("%5d %5d %5d\n", won, lost , error);
@@ -89,7 +96,9 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
+			
 		}
+		
 	}
 
 	public static void showUsage() {
