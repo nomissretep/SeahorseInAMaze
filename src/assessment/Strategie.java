@@ -80,15 +80,15 @@ public class Strategie implements IStrategie {
 		
 		
 		
-		
+		int i=0;
 		//bitte ueberabeiten wenn fehler
-		for(int i=0;i<board.getSpielerPositions().size();i++)
+		for(Position pGegner:board.getSpielerPositions().values())
 		{
-			Position pGegner=board.getSpielerPositions().values().iterator().next();//diesen Spieler tauschen		
 			boolean[][] gway=as.whereToGo(pGegner);
 			int gegnerSchaetze=Assessmentfield.count(Assessmentfield.and(gway,t));	
 		
 			h.value+=gegner[i]*(24-gegnerSchaetze);
+			++i;
 		}
 		return h;
 	}
