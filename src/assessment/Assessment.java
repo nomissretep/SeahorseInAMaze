@@ -45,44 +45,40 @@ public class Assessment {
 	public boolean[][] whereToGo(Position pos)
 	{
 		boolean[][] marked=new boolean[7][7];
-		whereToGo(board.getCards(),pos,marked);
+		whereToGo(board.getCards(),pos.x, pos.y,marked);
 		return marked;
 	}
 	
 	
 	public boolean[][] whereICanGo()
 	{
-		boolean[][] marked=new boolean[7][7];
-		whereToGo(board.getCards(),board.getMyPosition(),marked);
-		return marked;
+		return whereToGo(board.getMyPosition());
 	}
 	
-	private void whereToGo(Card[][] Cards,Position pos,boolean marked[][])
+	private void whereToGo(Card[][] Cards,int x, int y,boolean marked[][])
 	{
-		int x=pos.x;
-		int y=pos.y;
 		marked[x][y]=true;
-		if(x<8&&Cards[x+1][y].getOpenings()[0]&&!marked[x+1][y]){
+		if(x<6&&Cards[x+1][y].getOpenings()[0]&&!marked[x+1][y]){
 			x++;		
-			whereToGo(Cards,pos,marked);
+			whereToGo(Cards,x, y,marked);
 			x--;
 		}
 		if(x>0&&Cards[x-1][y].getOpenings()[2]&&!marked[x][y]){
 			x--;		
-			whereToGo(Cards,pos,marked);
+			whereToGo(Cards,x, y,marked);
 			x++;
 		}
 			
-		if(y<8&&Cards[x][y+1].getOpenings()[1]&&!marked[x][y+1]){
+		if(y<6&&Cards[x][y+1].getOpenings()[1]&&!marked[x][y+1]){
 			y++;		
-			whereToGo(Cards,pos,marked);
+			whereToGo(Cards,x,y,marked);
 			y--;
 		}
 				
 		if(y>0&&Cards[x][y-1].getOpenings()[3]&&!marked[x][y-1])
 		{
 			y--;		
-			whereToGo(Cards,pos,marked);
+			whereToGo(Cards,x,y,marked);
 			x++;
 		}
 	}

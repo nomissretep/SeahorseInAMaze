@@ -84,7 +84,7 @@ public class Strategie implements IStrategie {
 		//bitte ueberabeiten wenn fehler
 		for(Position pGegner:board.getSpielerPositions().values())
 		{
-			if(pGegner!=board.getMyPosition())
+			if(!pGegner.equals(board.getMyPosition()))
 			{
 				boolean[][] gway=as.whereToGo(pGegner);
 				int gegnerSchaetze=Assessmentfield.count(Assessmentfield.and(gway,t));	
