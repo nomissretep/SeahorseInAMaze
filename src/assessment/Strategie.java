@@ -42,7 +42,7 @@ public class Strategie implements IStrategie {
 	}
 	
 	
-	public High bewerte(Board board,int nah, int wegnah,int schaetze,int bewegung,int[] gegner) {
+	public static High bewerte(Board board,int nah, int wegnah,int schaetze,int bewegung,int[] gegner) {
 		
 		Assessment as=new Assessment(board);
 		//Boolean Array, True = Position hat schatz.
@@ -81,8 +81,8 @@ public class Strategie implements IStrategie {
 		
 		
 		
-		//bitte ueberabeiten
-		for(int i=0;i<gegner.length;i++)
+		//bitte ueberabeiten wenn fehler
+		for(int i=0;i<board.getSpielerPositions().size();i++)
 		{
 			Position pGegner=board.getSpielerPositions().values().iterator().next();//diesen Spieler tauschen		
 			boolean[][] gway=as.whereToGo(pGegner);
