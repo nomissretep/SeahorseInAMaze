@@ -5,6 +5,7 @@ import generated.CardType;
 import generated.TreasureType;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -242,6 +243,41 @@ public class Board {
 				}
 			}
 		}
+		return walls;
+	}
+	private void howManyWallsStraightLineRekursive(int[][] walls, int x, int y, int dx, int dy) {
+		int newx = x+dx, newy = y+dy;
+		if(0 > newx || newx > 6 || 0 > newy || newy > 6) return;
+		boolean currentCardOpenings[] = this.cards[y][x].openings;
+		if(dx != 0 && dy != 0) {
+			walls[newy][newx] = 
+				walls[y][x] +
+				Math.min(
+					(currentCardOpenings[1+dy] ? 0 : 1) + (this.cards[newy][x].openings[1-dy] ? 0 : 1) + (this.cards[newy][x].openings[2-dx] ? 0 : 1) + (this.cards[newy][newx].openings[2+dx] ? 0 : 1),
+					(currentCardOpenings[2-dx] ? 0 : 1) + (this.cards[y][newx].openings[2+dx] ? 0 : 1) + (this.cards[y][newx].openings[1-dy] ? 0 : 1) + (this.cards[newy][newx].openings[1+dy] ? 0 : 1)
+					);
+			howManyWallsStraightLineRekursive(walls, newx, newy, dx, 0); //Vertikal
+			howManyWallsStraightLineRekursive(walls, newx, newy, 0, dy); //Horizontal
+			howManyWallsStraightLineRekursive(walls, newx, newy, dx, dy);
+		} else if(dy != 0) { //Vertikal
+			walls[newy][newx] = walls[y][x] + (currentCardOpenings[1+dy] ? 0 : 1) + (this.cards[newy][x].openings[1-dy] ? 0 : 1);
+			howManyWallsStraightLineRekursive(walls, newx, newy, 0, dy);
+		} else { //dx != 0 //Horizontal
+			walls[newy][newx] = walls[y][x] + (currentCardOpenings[2-dx] ? 0 : 1) + (this.cards[y][newx].openings[2+dx] ? 0 : 1);
+			howManyWallsStraightLineRekursive(walls, newx, newy, dx, 0);
+		}
+	}
+	public int[][] howManyWallsStraightLine(Position pos) {
+		int[][] walls = new int[7][7];
+		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 0,-1);
+		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1, 0);
+		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 0, 1);
+		howManyWallsStraightLineRekursive(walls, pos.x, pos.y,-1, 0);
+
+		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1,-1);
+		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1, 1);
+		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, -1, 1);
+		howManyWallsStraightLineRekursive(walls, pos.x, pos.y,-1, -1);
 		return walls;
 	}
 
