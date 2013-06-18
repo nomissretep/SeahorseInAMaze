@@ -67,7 +67,7 @@ public class Assessment {
 			whereToGo(Cards,pos,marked);
 			x--;
 		}
-		if(x>=0&&Cards[x-1][y].getOpenings()[2]&&!marked[x][y]){
+		if(x>0&&Cards[x-1][y].getOpenings()[2]&&!marked[x][y]){
 			x--;		
 			whereToGo(Cards,pos,marked);
 			x++;
@@ -79,7 +79,7 @@ public class Assessment {
 			y--;
 		}
 				
-		if(y>=0&&Cards[x][y-1].getOpenings()[3]&&!marked[x][y-1])
+		if(y>0&&Cards[x][y-1].getOpenings()[3]&&!marked[x][y-1])
 		{
 			y--;		
 			whereToGo(Cards,pos,marked);
