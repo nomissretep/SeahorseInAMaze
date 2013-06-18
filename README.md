@@ -12,7 +12,7 @@ A value for `matches` will result in multiple matches being played with the same
 After each match a Random-Wait time will be choosen between 1 and 5 seconds. 
 Also a statistic will show how many games you won, lost or resulted in an error.  
 When recompiling the Selected KI the KI will be reloaded before every match.
------------
+
 
 ## Strategie
 
@@ -30,6 +30,7 @@ So noch nicht implementiert!
 
 ### MatthiasKI
 Bewertungsreihenfolge:
+
 1. Kann Schatz erreichen ja/nein
 2. `Anzahl Felder in meinem Netzwerk/Anzahl Spieler in diesem Netzwerk` soll maximal werden.
 3. Anzahl der Wände, die zwischen mir und meinem Schatz stehen soll minimal werden.
