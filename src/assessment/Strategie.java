@@ -84,11 +84,14 @@ public class Strategie implements IStrategie {
 		//bitte ueberabeiten wenn fehler
 		for(Position pGegner:board.getSpielerPositions().values())
 		{
-			boolean[][] gway=as.whereToGo(pGegner);
-			int gegnerSchaetze=Assessmentfield.count(Assessmentfield.and(gway,t));	
-		
-			h.value+=gegner[i]*(24-gegnerSchaetze);
-			++i;
+			if(pGegner!=board.getMyPosition())
+			{
+				boolean[][] gway=as.whereToGo(pGegner);
+				int gegnerSchaetze=Assessmentfield.count(Assessmentfield.and(gway,t));	
+			
+				h.value+=gegner[i]*(24-gegnerSchaetze);
+				++i;
+			}
 		}
 		return h;
 	}
