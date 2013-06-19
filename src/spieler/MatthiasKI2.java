@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import client.types.IllegalTurnException;
@@ -24,10 +25,10 @@ public class MatthiasKI2 extends Spieler {
 
 		public final int myNetworkSize;
 		
-		public final double averageEnemyMovability;
+		public final int averageEnemyMovability;
 		
 		
-		public Bewertung(boolean canFindTreasure, int howManyWallsBlockMyWay, double averageEnemyMovability, int myNetworkSize) {
+		public Bewertung(boolean canFindTreasure, int howManyWallsBlockMyWay, int averageEnemyMovability, int myNetworkSize) {
 			this.canFindTreasure = canFindTreasure;
 			this.howManyWallsBlockMyWayToTreasure = howManyWallsBlockMyWay;
 			this.averageEnemyMovability = averageEnemyMovability;
@@ -40,7 +41,7 @@ public class MatthiasKI2 extends Spieler {
 			if(this.canFindTreasure == o.canFindTreasure) {
 				if(this.myNetworkSize == o.myNetworkSize) {
 					if(this.howManyWallsBlockMyWayToTreasure == o.howManyWallsBlockMyWayToTreasure) {
-						if(Math.abs(this.averageEnemyMovability - o.averageEnemyMovability) <= 0.05) {
+						if(this.averageEnemyMovability == o.averageEnemyMovability) {
 							return 0;
 						} else {
 							return this.averageEnemyMovability > o.averageEnemyMovability ? 1 : -1;
@@ -163,10 +164,12 @@ public class MatthiasKI2 extends Spieler {
 		int myNetworkSize = whereCanIGo.size()/playersInMyNetwork;
 		
 		int enemysCanMoveTiles = 0;
-		for(Position pos: shiftetBoard.getSpielerPositions().values()) {
-			enemysCanMoveTiles += shiftetBoard.getPossiblePositionsFromPosition(pos).size();
+		for(Entry<Integer, Position> entry: shiftetBoard.getSpielerPositions().entrySet()) {
+			if(entry.getKey() != this.id) {
+				enemysCanMoveTiles += shiftetBoard.getPossiblePositionsFromPosition(entry.getValue()).size();
+			}
 		}
-		double averageEnemyMovability = ((double)enemysCanMoveTiles)/shiftetBoard.getSpielerPositions().size();
+		int averageEnemyMovability = enemysCanMoveTiles;
 		
 		Bewertung b = new Bewertung(canFindTreasure, howManyWallsBlockMyWayToTreasure, averageEnemyMovability, myNetworkSize);
 		if(b.compareTo(currentMaxBewertung) > 0) {
