@@ -74,6 +74,7 @@ public abstract class Spieler implements ISpieler {
 		System.out.println("Start Board: ");
 		board.outputPretty();
 		System.out.format("Board after %c has been shiftet: \n", new Card(moveMessage.getShiftCard()).getChar());
+		System.out.println("Moving to "+new Position(moveMessage.getNewPinPos()));
 		try {
 			Board shiftedBoard = board.shift(new Position(moveMessage.getShiftPosition()), new Card(moveMessage.getShiftCard()));
 			board.setMyPosition(new Position(moveMessage.getNewPinPos()));
