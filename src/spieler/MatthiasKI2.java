@@ -58,7 +58,7 @@ public class MatthiasKI2 extends Spieler {
 			}
 		}
 		public String toString() {
-			return String.format("Treasure: %d\nNetworkSize: %d\nWalls: %d\nMovability: %f\n", canFindTreasure?1:0, myNetworkSize, howManyWallsBlockMyWayToTreasure, averageEnemyMovability);
+			return String.format("Treasure: %d\nNetworkSize: %d\nWalls: %d\nMovability: %d\n", canFindTreasure?1:0, myNetworkSize, howManyWallsBlockMyWayToTreasure, averageEnemyMovability);
 		}
 	}
 	
