@@ -174,14 +174,6 @@ public class MatthiasKI extends Spieler {
 			currentMaxZuege.clear();
 		}
 		if(b.compareTo(currentMaxBewertung) >= 0) {
-//			shiftetBoard.outputPretty();
-//			System.out.println("Walls: ");
-//			for(int y_=0; y_ < 7; y_++) {
-//				for(int x_ = 0; x_ < 7; x_++) {
-//					System.out.format("%4d",walls[y_][x_]);
-//				}
-//				System.out.println();
-//			}
 			currentMaxBewertung = b;
 			currentMaxZuege.add(new Zug(shiftPosition, rotationCount, movePositions));
 		}

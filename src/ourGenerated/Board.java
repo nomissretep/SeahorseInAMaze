@@ -138,6 +138,7 @@ public class Board {
 		int x, y;
 		boolean[] currentCardOpenings;
 		boolean[] visited = new boolean[7 * 7];
+		visited[position.y * 7 + position.x] = true;
 
 		while (haveRevisited < canVisitSize) {
 			currentIndex = canVisit[haveRevisited++];

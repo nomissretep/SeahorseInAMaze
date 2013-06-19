@@ -53,6 +53,7 @@ public class Client {
 			System.out.format("The Game has ended Winner: %d %s\n",
 					e.getWinMessage().getWinner().getId(),
 					e.getWinMessage().getWinner().getValue());
+			WinStatistics.addStatistic(e.getWinMessage());
 			if(spieler.getId() == e.getWinMessage().getWinner().getId()) {
 				System.out.println("THATS ME!!!");
 				return true;

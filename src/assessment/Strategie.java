@@ -73,8 +73,14 @@ public class Strategie implements IStrategie {
 		int[][]tposible=Assessmentfield.mult(iGo,tadd);
 		High h=Assessmentfield.findHigh(tposible);
 		
+		for(int i=0;i<7;i++) {
+			for(int j=0;j<7;j++) {
+				System.out.format("%2d ", iGo[i][j] ? 1 : 0);
+			}
+			System.out.println();
+		}
 		
-
+		
 		
 		h.value+=fields*bewegung+schaetze2*schaetze;
 		
@@ -84,7 +90,7 @@ public class Strategie implements IStrategie {
 		//bitte ueberabeiten wenn fehler
 		for(Position pGegner:board.getSpielerPositions().values())
 		{
-			if(pGegner!=board.getMyPosition())
+			if(!pGegner.equals(board.getMyPosition()))
 			{
 				boolean[][] gway=as.whereToGo(pGegner);
 				int gegnerSchaetze=Assessmentfield.count(Assessmentfield.and(gway,t));	
