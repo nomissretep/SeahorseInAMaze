@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Card {
 
-	protected boolean openings[] = new boolean[4];
+	public boolean openings[] = new boolean[4];
 	// 0=oben, 1=rechts, 2=unten, 3=links
 	protected TreasureType treasure;
 	protected ArrayList<Integer> players;
