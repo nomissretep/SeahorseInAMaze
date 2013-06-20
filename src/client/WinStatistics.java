@@ -1,36 +1,30 @@
 package client;
 
-import java.io.PrintStream;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
 import generated.WinMessageType;
 import generated.WinMessageType.Winner;
 
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 public class WinStatistics {
 	private static int totalGames = 0;
-	private static int iWonCount = 0;
-	private static int iLostCount = 0;
-	private static HashMap<Integer, Integer> iLostOn= new HashMap<Integer, Integer>();
-	private static HashMap<Integer, Integer> iWonOn= new HashMap<Integer, Integer>();
-	private static HashMap<String, Integer> playerNameHasWon= new HashMap<String, Integer>();
+	private static String ourname = null;
+	private static HashMap<String, HashMap<Integer,Integer>> playerNameHasWon= new HashMap<String, HashMap<Integer,Integer>>();
 	private static HashMap<Integer, Integer> playerNumberhasWon= new HashMap<Integer, Integer>();
 	public static void addStatistic(WinMessageType wmt, int myId) {
 		totalGames += 1;
 		Winner w = wmt.getWinner();
-		addOneTo(playerNameHasWon, w.getValue());
+		if(!playerNameHasWon.containsKey(w.getValue())) {
+			playerNameHasWon.put(w.getValue(), new HashMap<Integer, Integer>());
+		}
+		addOneTo(playerNameHasWon.get(w.getValue()), w.getId());
 		addOneTo(playerNumberhasWon, w.getId());
 		if(myId == w.getId()) {
 			//I won
-			iWonCount+=1;
-			addOneTo(iWonOn, myId);
-			get(iLostOn, myId);
+			ourname = w.getValue();
 		} else {
-			iLostCount+=1;
-			addOneTo(iLostOn, myId);
-			get(iWonOn, myId);
 			get(playerNumberhasWon, myId);
 		}
 	}
@@ -52,27 +46,37 @@ public class WinStatistics {
 	public static void printStatistic() {
 		printStatistic(System.err);
 	}
-
+	private static final int MAXNAMEWIDTH = 15;
 	public static void printStatistic(PrintStream out) {
-		int maxWins = Collections.max(playerNameHasWon.values());
-		int maxWinLength = Math.max((int)Math.log10(maxWins) + 1, 4);
-		out.format("%"+maxWinLength+"s | %s\n", "wins", "Name");
+		int totalGamesSlotLength = Math.max((int)Math.log10(totalGames) + 1, 4);
+
+		out.format("%6s | %"+totalGamesSlotLength+"s ", "slot", "wins");
 		for(String s: playerNameHasWon.keySet()) {
-			out.format("%"+maxWinLength+"d | %s\n", get(playerNameHasWon,s), s);
+			int l = Math.min(MAXNAMEWIDTH, s.length());
+			int w = Math.max(l, totalGamesSlotLength);
+			boolean itsme = s.equals(ourname);
+			out.format("|%c%"+w+"s%c",itsme ? '>' : ' ', s.substring(0, l), itsme ? '<' : ' ');
 		}
 		out.println();
-		
-		int totalGamesSlotLength = Math.max((int)Math.log10(totalGames) + 1, 4);
-		int totalMyWinsLength = Math.max((int)Math.log10(iWonCount) + 1, 7);
-		int totalMyLossLength = Math.max((int)Math.log10(iLostCount) + 1, 8);
-
-		out.format("%6s | %"+totalGamesSlotLength+"s | %"+totalMyWinsLength + "s | %"+totalMyLossLength +"s\n",
-				"slot", "wins", "my wins", "my losts");
 		for(int i: playerNumberhasWon.keySet()) {
-			out.format("%6d | %"+totalGamesSlotLength+"d | %"+totalMyWinsLength + "d | %"+totalMyLossLength +"d\n", i, get(playerNumberhasWon,i), get(iWonOn,i),get(iLostOn,i));
+			out.format("%6d | %"+totalGamesSlotLength+"d", i, get(playerNumberhasWon,i));
+			for(Entry<String, HashMap<Integer, Integer>> e: playerNameHasWon.entrySet()) {
+				int l = Math.min(MAXNAMEWIDTH, e.getKey().length());
+				int w = Math.max(l, totalGamesSlotLength);
+				out.format(" | %"+w+"d", get(e.getValue(),i));
+			}
+			out.println();
 		}
-		out.format("%6s | %"+totalGamesSlotLength+"s | %"+totalMyWinsLength + "s | %"+totalMyLossLength +"s\n", "", "", "", "");
-		out.format("%6s | %"+totalGamesSlotLength+"d | %"+totalMyWinsLength + "d | %"+totalMyLossLength +"d\n", "Total:", totalGames, iWonCount, iLostCount);
-		
+		out.format("%6s | %"+totalGamesSlotLength+"d", "Total:", totalGames);
+		for(Entry<String, HashMap<Integer, Integer>> e: playerNameHasWon.entrySet()) {
+			int l = Math.min(MAXNAMEWIDTH, e.getKey().length());
+			int w = Math.max(l, totalGamesSlotLength);
+			int s = 0;
+			for(int i: e.getValue().values()) {
+				s+=i;
+			}
+			out.format(" | %"+w+"d", s);
+		}
+		out.println();
 	}
 }
