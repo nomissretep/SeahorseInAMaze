@@ -68,8 +68,9 @@ public class Main {
 		}
 		
 		int won = 0;
-		int lost = 0;
-		int error = 0;
+//		int won = 0;
+//		int lost = 0;
+//		int error = 0;
 		Random rand = new Random();
 		for(int i =0; i< howOften; i++) {
 			try {
@@ -77,18 +78,18 @@ public class Main {
 				Client client = new Client(hostname, port);
 				System.out.println("Starting KI ...");
 				if(client.run(ki)) {
-					won++;
+//					won++;
 				} else {
-					lost++;
+//					lost++;
 				}
 			} catch(Throwable t) {
 				t.printStackTrace();
-				error++;
+//				error++;
 			}
 			WinStatistics.printStatistic();
-			System.out.format("Statistic after %d/%d games: \n",i + 1, howOften);
-			System.out.format("%5s %5s %5s\n", "won", "lost", "error");
-			System.out.format("%5d %5d %5d\n", won, lost , error);
+//			System.out.format("Statistic after %d/%d games: \n",i + 1, howOften);
+//			System.out.format("%5s %5s %5s\n", "won", "lost", "error");
+//			System.out.format("%5d %5d %5d\n", won, lost , error);
 			if(i + 1 < howOften) {
 				try {
 					Thread.sleep(1000 + rand.nextInt(4000));
