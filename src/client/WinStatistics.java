@@ -1,5 +1,6 @@
 package client;
 
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -49,25 +50,29 @@ public class WinStatistics {
 		}
 	}
 	public static void printStatistic() {
+		printStatistic(System.err);
+	}
+
+	public static void printStatistic(PrintStream out) {
 		int maxWins = Collections.max(playerNameHasWon.values());
 		int maxWinLength = Math.max((int)Math.log10(maxWins) + 1, 4);
-		System.out.format("%"+maxWinLength+"s | %s\n", "wins", "Name");
+		out.format("%"+maxWinLength+"s | %s\n", "wins", "Name");
 		for(String s: playerNameHasWon.keySet()) {
-			System.out.format("%"+maxWinLength+"d | %s\n", get(playerNameHasWon,s), s);
+			out.format("%"+maxWinLength+"d | %s\n", get(playerNameHasWon,s), s);
 		}
-		System.out.println();
+		out.println();
 		
 		int totalGamesSlotLength = Math.max((int)Math.log10(totalGames) + 1, 4);
 		int totalMyWinsLength = Math.max((int)Math.log10(iWonCount) + 1, 7);
 		int totalMyLossLength = Math.max((int)Math.log10(iLostCount) + 1, 8);
 
-		System.out.format("%6s | %"+totalGamesSlotLength+"s | %"+totalMyWinsLength + "s | %"+totalMyLossLength +"s\n",
+		out.format("%6s | %"+totalGamesSlotLength+"s | %"+totalMyWinsLength + "s | %"+totalMyLossLength +"s\n",
 				"slot", "wins", "my wins", "my losts");
 		for(int i: playerNumberhasWon.keySet()) {
-			System.out.format("%6d | %"+totalGamesSlotLength+"d | %"+totalMyWinsLength + "d | %"+totalMyLossLength +"d\n", i, get(playerNumberhasWon,i), get(iWonOn,i),get(iLostOn,i));
+			out.format("%6d | %"+totalGamesSlotLength+"d | %"+totalMyWinsLength + "d | %"+totalMyLossLength +"d\n", i, get(playerNumberhasWon,i), get(iWonOn,i),get(iLostOn,i));
 		}
-		System.out.format("%6s | %"+totalGamesSlotLength+"s | %"+totalMyWinsLength + "s | %"+totalMyLossLength +"s\n", "", "", "", "");
-		System.out.format("%6s | %"+totalGamesSlotLength+"d | %"+totalMyWinsLength + "d | %"+totalMyLossLength +"d\n", "Total:", totalGames, iWonCount, iLostCount);
+		out.format("%6s | %"+totalGamesSlotLength+"s | %"+totalMyWinsLength + "s | %"+totalMyLossLength +"s\n", "", "", "", "");
+		out.format("%6s | %"+totalGamesSlotLength+"d | %"+totalMyWinsLength + "d | %"+totalMyLossLength +"d\n", "Total:", totalGames, iWonCount, iLostCount);
 		
 	}
 }
