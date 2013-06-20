@@ -67,7 +67,6 @@ public class Main {
 			return;
 		}
 		
-		int won = 0;
 //		int won = 0;
 //		int lost = 0;
 //		int error = 0;
@@ -92,7 +91,7 @@ public class Main {
 //			System.out.format("%5d %5d %5d\n", won, lost , error);
 			if(i + 1 < howOften) {
 				try {
-					Thread.sleep(1000 + rand.nextInt(4000));
+					Thread.sleep(500 + rand.nextInt(2000));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
