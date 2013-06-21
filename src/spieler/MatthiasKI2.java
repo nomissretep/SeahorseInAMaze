@@ -122,23 +122,20 @@ public class MatthiasKI2 extends Spieler {
 		List<Position> whereCanIGo = shiftetBoard.getPossiblePositionsFromPosition(myPos);
 		int[][] walls;
 		
+		//Schatz ist nicht rausgeschoben && Ich kann ihn erreichen
 		boolean canFindTreasure = treasurePos !=null && whereCanIGo.contains(treasurePos);
 
+		List<Position> movePositions = new LinkedList<Position>();
+		int howManyWallsBlockMyWayToTreasure = 0;
+		
+		//Kann schatz nicht finden, dieser ist aber auf dem board.
 		if(!canFindTreasure && treasurePos != null) {
 			 walls = shiftetBoard.howManyWallsStraightLine(treasurePos);
 			 for(int i = 5; i >= 0; i -= 2) {
 				 walls[0][i] = walls[6][i] = Math.min(walls[0][i], walls[6][i]);
 				 walls[i][0] = walls[i][6] = Math.min(walls[i][0], walls[i][6]);
 			 }
-		} else {
-			walls = new int[7][7];
-		}
-		
-		
-		List<Position> movePositions = new LinkedList<Position>();
-		int howManyWallsBlockMyWayToTreasure = 0;
 
-		if(!canFindTreasure) {
 			int minWalls = Integer.MAX_VALUE;
 			for(Position pos: whereCanIGo) {
 				if(walls[pos.y][pos.x] < minWalls) {
@@ -150,27 +147,31 @@ public class MatthiasKI2 extends Spieler {
 				}
 			}
 			howManyWallsBlockMyWayToTreasure = minWalls;
-		} else {
+		} else if(canFindTreasure){ //Kann schatz finden => dieser ist auf dem board
 			movePositions.add(treasurePos);
+		} else { //Schatz ist rausgeschoben
+			return; //Das wollen wir nicht.
 		}
 		
+		//Zähle, wieviele Spieler in dem gleichen Netzwerk sind, wie ich.
 		int playersInMyNetwork = 0;
 		for(Position p: whereCanIGo) {
 			playersInMyNetwork += shiftetBoard.getCards()[p.y][p.x].getPlayers().size();
 		}
 		int myNetworkSize = whereCanIGo.size()/playersInMyNetwork;
 		
+		//Summiere auf, wieviele Felder meine Gegner erreichen können.
 		int enemysCanMoveTiles = 0;
 		for(Entry<Integer, Position> entry: shiftetBoard.getSpielerPositions().entrySet()) {
 			if(entry.getKey() != this.id) {
 				enemysCanMoveTiles += shiftetBoard.getPossiblePositionsFromPosition(entry.getValue()).size();
 			}
 		}
-		int averageEnemyMovability = enemysCanMoveTiles;
 		
-		Bewertung b = new Bewertung(canFindTreasure, howManyWallsBlockMyWayToTreasure, averageEnemyMovability, myNetworkSize);
+		Bewertung b = new Bewertung(canFindTreasure, howManyWallsBlockMyWayToTreasure, enemysCanMoveTiles, myNetworkSize);
+		
+		//Aktuelle Bewertung ist besser. => Alte gute zuege verwerfen
 		if(b.compareTo(currentMaxBewertung) > 0) {
-			//System.out.println(b);
 			currentMaxZuege.clear();
 		}
 		if(b.compareTo(currentMaxBewertung) >= 0) {
