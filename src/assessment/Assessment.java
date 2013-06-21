@@ -1,18 +1,19 @@
 package assessment;
 
 
-import ourGenerated.*;
-import generated.PositionType;
-import generated.TreasureType;
+import ourGenerated.Board;
+import ourGenerated.Card;
+import ourGenerated.Position;
 
 public class Assessment {
 	
 	Board board;
-	
+	Card[][] cards;
 	
 	
 	public Assessment(Board karte) {		
-		board=karte;	
+		board=karte;
+		this.cards = board.getCards();
 	}	
 	
 	public int[][] weights(Position pos)//28-100
@@ -42,45 +43,60 @@ public class Assessment {
 	}
 	
 	
-	public boolean[][] whereToGo(Position pos)
+	public boolean[][] whereToGo(Position position)
 	{
-		boolean[][] marked=new boolean[7][7];
-		whereToGo(board.getCards(),pos.y, pos.x,marked);
-		return marked;
+		//canVisit is actually used as a Queue. 
+		int canVisit[] = new int[7 * 7];
+		int canVisitSize = 0;
+		int haveRevisited = 0;
+		int currentIndex;
+		canVisit[canVisitSize++] = position.y * 7 + position.x;
+		int x, y;
+		boolean[] currentCardOpenings;
+		boolean[] visited = new boolean[7 * 7];
+		visited[position.y * 7 + position.x] = true;
+
+		while (haveRevisited < canVisitSize) {
+			currentIndex = canVisit[haveRevisited++];
+			x = currentIndex % 7;
+			y = currentIndex / 7;
+			currentCardOpenings = this.cards[y][x].openings;
+
+			if (y > 0 && !visited[currentIndex - 7] && currentCardOpenings[0]
+					&& this.cards[y - 1][x].openings[2]) { // Oben
+				canVisit[canVisitSize++] = (currentIndex - 7);
+				visited[currentIndex - 7] = true;
+			}
+
+			if (x < 6 && !visited[currentIndex + 1]	&& currentCardOpenings[1]
+					&& this.cards[y][x + 1].openings[3]) { // Rechts
+				canVisit[canVisitSize++] = (currentIndex + 1);
+				visited[currentIndex + 1] = true;
+			}
+
+			if (y < 6 && !visited[currentIndex + 7]	&& currentCardOpenings[2]
+					&& this.cards[y + 1][x].openings[0]) { // Unten
+				canVisit[canVisitSize++] = (currentIndex + 7);
+				visited[currentIndex + 7] = true;
+			}
+
+			if (x > 0 && !visited[currentIndex - 1] && currentCardOpenings[3]
+					&& this.cards[y][x - 1].openings[1]) { // Links
+				canVisit[canVisitSize++] = currentIndex - 1;
+				visited[currentIndex - 1] = true;
+			}
+		}
+		boolean[][] whereToGo = new boolean[7][7];
+		for (int i = canVisitSize - 1; i >= 0; --i) {
+			whereToGo[canVisit[i] / 7][canVisit[i] % 7] = true;
+		}
+		return whereToGo;
 	}
 	
 	
 	public boolean[][] whereICanGo()
 	{
 		return whereToGo(board.getMyPosition());
-	}
-	
-	private void whereToGo(Card[][] Cards,int y, int x,boolean marked[][])
-	{
-		marked[y][x]=true;
-		if(y<6&&Cards[y+1][x].getOpenings()[0]&&!marked[y+1][x]){
-			y++;		
-			whereToGo(Cards,y, x,marked);
-			y--;
-		}
-		if(y>0&&Cards[y-1][x].getOpenings()[2]&&!marked[y][x]){
-			y--;		
-			whereToGo(Cards,y, x,marked);
-			y++;
-		}
-			
-		if(x<6&&Cards[y][x+1].getOpenings()[1]&&!marked[y][x+1]){
-			x++;		
-			whereToGo(Cards,y,x,marked);
-			x--;
-		}
-				
-		if(x>0&&Cards[y][x-1].getOpenings()[3]&&!marked[y][x-1])
-		{
-			x--;		
-			whereToGo(Cards,y,x,marked);
-			y++;
-		}
 	}
 	
 	
