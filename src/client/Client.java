@@ -50,11 +50,11 @@ public class Client {
 			}
 		} catch (GameHasEndedException e) {
 			System.out.format("Spiel dauerte %d Zuege.\n", zuege);
-			System.out.format("The Game has ended Winner: %d %s\n",
-					e.getWinMessage().getWinner().getId(),
-					e.getWinMessage().getWinner().getValue());
+			System.out.format("The Game has ended Winner: %d %s\n", e
+					.getWinMessage().getWinner().getId(), e.getWinMessage()
+					.getWinner().getValue());
 			WinStatistics.addStatistic(e.getWinMessage(), spieler.getId());
-			if(spieler.getId() == e.getWinMessage().getWinner().getId()) {
+			if (spieler.getId() == e.getWinMessage().getWinner().getId()) {
 				System.out.println("THATS ME!!!");
 				return true;
 			}

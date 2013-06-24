@@ -79,11 +79,11 @@ public class DecisionKI extends Spieler {
 					this.minShiftPosition = shiftPosition;
 					this.minRotation = rotation;
 					this.minPinPosition = shiftetBoard.getTreasurePosition();
-//					System.out.println("New Treasure-Min on "
-//							+ shiftetBoard.getTreasurePosition() + ":"
-//							+ this.currentAverageMin + "\n"
-//							+ this.minShiftPosition + ":" + this.minRotation);
-//					shiftetBoard.outputPretty();
+					// System.out.println("New Treasure-Min on "
+					// + shiftetBoard.getTreasurePosition() + ":"
+					// + this.currentAverageMin + "\n"
+					// + this.minShiftPosition + ":" + this.minRotation);
+					// shiftetBoard.outputPretty();
 				}
 			}
 		} else {
@@ -94,21 +94,21 @@ public class DecisionKI extends Spieler {
 				this.minRotation = rotation;
 				this.minCanGetTreasure = true;
 				this.minPinPosition = shiftetBoard.getTreasurePosition();
-//				System.out.println("FOUND TREASURE on "
-//						+ shiftetBoard.getTreasurePosition() + ":"
-//						+ this.currentAverageMin + "\n" + this.minShiftPosition
-//						+ ":" + this.minRotation);
-//				shiftetBoard.outputPretty();
+				// System.out.println("FOUND TREASURE on "
+				// + shiftetBoard.getTreasurePosition() + ":"
+				// + this.currentAverageMin + "\n" + this.minShiftPosition
+				// + ":" + this.minRotation);
+				// shiftetBoard.outputPretty();
 			} else {
 				if (average < this.currentAverageMin) {
 					this.currentAverageMin = average;
 					this.minShiftPosition = shiftPosition;
 					this.minRotation = rotation;
 					this.minPinPosition = shiftetBoard.myPosition();
-//					System.out.println("New Chaos-Min: "
-//							+ this.currentAverageMin + "\n"
-//							+ this.minShiftPosition + ":" + this.minRotation);
-//					shiftetBoard.outputPretty();
+					// System.out.println("New Chaos-Min: "
+					// + this.currentAverageMin + "\n"
+					// + this.minShiftPosition + ":" + this.minRotation);
+					// shiftetBoard.outputPretty();
 				}
 			}
 		}

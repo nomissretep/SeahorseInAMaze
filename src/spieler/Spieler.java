@@ -23,9 +23,11 @@ public abstract class Spieler implements ISpieler {
 
 	protected int id;
 
+	@Override
 	public int getId() {
 		return this.id;
 	}
+
 	@Override
 	public void setId(int id) {
 		this.lastIdHasNTreasuresleft = null;
@@ -42,7 +44,8 @@ public abstract class Spieler implements ISpieler {
 		board.outputPretty();
 		TreeMap<Integer, Integer> idHasNTreasuresleft = new TreeMap<Integer, Integer>();
 		for (TreasuresToGoType ttgt : awaitMoveMessageType.getTreasuresToGo()) {
-			System.out.print("Spieler " + ttgt.getPlayer() + " braucht noch " + ttgt.getTreasures());
+			System.out.print("Spieler " + ttgt.getPlayer() + " braucht noch "
+					+ ttgt.getTreasures());
 			System.out.println(ttgt.getPlayer() == this.id ? "<" : "");
 			idHasNTreasuresleft.put(ttgt.getPlayer(), ttgt.getTreasures());
 			if (this.lastIdHasNTreasuresleft != null) {
@@ -65,42 +68,54 @@ public abstract class Spieler implements ISpieler {
 		if (moveMessage.getNewPinPos() == null) {
 			throw new RuntimeException("KI did not set new pin pos!");
 		}
-		if(moveMessage.getNewPinPos().equals(board.shiftCardPosition(new Position(moveMessage.getShiftPosition()), board.getTreasurePosition()))) {
-			//Wir stehen (nach dem shiften) auf unserer SchatzKarte => Diese wird im nächsten Zug weg sein.
-			if(!this.alreadyFoundTreasures.contains(board.getTreasure())) {
+		if (moveMessage.getNewPinPos().equals(
+				board.shiftCardPosition(
+						new Position(moveMessage.getShiftPosition()),
+						board.getTreasurePosition()))) {
+			// Wir stehen (nach dem shiften) auf unserer SchatzKarte => Diese
+			// wird im nächsten Zug weg sein.
+			if (!this.alreadyFoundTreasures.contains(board.getTreasure())) {
 				this.alreadyFoundTreasures.add(board.getTreasure());
 			}
 		}
 		System.out.println("Start Board: ");
 		board.outputPretty();
-		System.out.format("Board after %c has been shiftet: \n", new Card(moveMessage.getShiftCard()).getChar());
-		System.out.println("Moving to "+new Position(moveMessage.getNewPinPos()));
+		System.out.format("Board after %c has been shiftet: \n", new Card(
+				moveMessage.getShiftCard()).getChar());
+		System.out.println("Moving to "
+				+ new Position(moveMessage.getNewPinPos()));
 		try {
-			Board shiftedBoard = board.shift(new Position(moveMessage.getShiftPosition()), new Card(moveMessage.getShiftCard()));
+			Board shiftedBoard = board.shift(
+					new Position(moveMessage.getShiftPosition()), new Card(
+							moveMessage.getShiftCard()));
 			board.setMyPosition(new Position(moveMessage.getNewPinPos()));
 			shiftedBoard.outputPretty();
 		} catch (Exception e) {
 			System.out.println("illegal Move!");
 		}
-		return moveMessage; 
+		return moveMessage;
 	}
-	
-	public List<Position> filterPositionsForTreasures(Board b, List<Position> positions) {
+
+	public List<Position> filterPositionsForTreasures(Board b,
+			List<Position> positions) {
 		List<Position> positionsWithTreasures = new LinkedList<Position>();
 		Card cards[][] = b.getCards();
-		for(Position p: positions) {
-			if(cards[p.y][p.x].getTreasure() != null) {
+		for (Position p : positions) {
+			if (cards[p.y][p.x].getTreasure() != null) {
 				positionsWithTreasures.add(p);
 			}
 		}
 		return positionsWithTreasures;
 	}
-	
-	public List<Position> filterPositionsForNotYetTakenTreasures(Board b, List<Position> positions) {
+
+	public List<Position> filterPositionsForNotYetTakenTreasures(Board b,
+			List<Position> positions) {
 		List<Position> positionsWithNotYetTakenTreasures = new LinkedList<Position>();
 		Card cards[][] = b.getCards();
-		for(Position p: positions) {
-			if(cards[p.y][p.x].getTreasure() != null && !alreadyFoundTreasures.contains(cards[p.y][p.x].getTreasure())) {
+		for (Position p : positions) {
+			if (cards[p.y][p.x].getTreasure() != null
+					&& !this.alreadyFoundTreasures.contains(cards[p.y][p.x]
+							.getTreasure())) {
 				positionsWithNotYetTakenTreasures.add(p);
 			}
 		}

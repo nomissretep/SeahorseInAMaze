@@ -1,7 +1,6 @@
 package networking;
 
 import generated.MazeCom;
-import generated.MazeComType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

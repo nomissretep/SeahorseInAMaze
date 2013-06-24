@@ -5,7 +5,6 @@ import generated.CardType;
 import generated.TreasureType;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -129,7 +128,7 @@ public class Board {
 	}
 
 	public List<Position> getPossiblePositionsFromPosition(Position position) {
-		//canVisit is actually used as a Queue. 
+		// canVisit is actually used as a Queue.
 		int canVisit[] = new int[7 * 7];
 		int canVisitSize = 0;
 		int haveRevisited = 0;
@@ -152,13 +151,13 @@ public class Board {
 				visited[currentIndex - 7] = true;
 			}
 
-			if (x < 6 && !visited[currentIndex + 1]	&& currentCardOpenings[1]
+			if (x < 6 && !visited[currentIndex + 1] && currentCardOpenings[1]
 					&& this.cards[y][x + 1].openings[3]) { // Rechts
 				canVisit[canVisitSize++] = (currentIndex + 1);
 				visited[currentIndex + 1] = true;
 			}
 
-			if (y < 6 && !visited[currentIndex + 7]	&& currentCardOpenings[2]
+			if (y < 6 && !visited[currentIndex + 7] && currentCardOpenings[2]
 					&& this.cards[y + 1][x].openings[0]) { // Unten
 				canVisit[canVisitSize++] = (currentIndex + 7);
 				visited[currentIndex + 7] = true;
@@ -177,13 +176,12 @@ public class Board {
 		}
 		return list;
 	}
-	
-	
+
 	public int[][] howManyWallsBlockMyWayTo(Position position) {
-		//canVisit is actually used as a Queue. 
+		// canVisit is actually used as a Queue.
 		int walls[][] = new int[7][7];
-		for(int y = 7 - 1; y >= 0; --y) {
-			for(int x = 7 - 1; x >= 0; --x) {
+		for (int y = 7 - 1; y >= 0; --y) {
+			for (int x = 7 - 1; x >= 0; --x) {
 				walls[y][x] = Integer.MAX_VALUE;
 			}
 		}
@@ -195,50 +193,54 @@ public class Board {
 		int didVisitAllFromEndTo = visited.length - 1;
 		int currentWalls;
 		int currentWallsAdd;
-		while (currentIndex >=  0) {
+		while (currentIndex >= 0) {
 			x = currentIndex % 7;
 			y = currentIndex / 7;
 			currentWalls = walls[y][x];
 			currentCardOpenings = this.cards[y][x].openings;
-			
+
 			if (y > 0) { // Oben
-				currentWallsAdd = (currentCardOpenings[0] ? 0 : 1) + (this.cards[y - 1][x].openings[2] ? 0 : 1);
-				if(walls[y - 1][x] > currentWalls + currentWallsAdd) {
+				currentWallsAdd = (currentCardOpenings[0] ? 0 : 1)
+						+ (this.cards[y - 1][x].openings[2] ? 0 : 1);
+				if (walls[y - 1][x] > currentWalls + currentWallsAdd) {
 					walls[y - 1][x] = currentWalls + currentWallsAdd;
 				}
 			}
 
 			if (x < 7 - 1) { // Rechts
-				currentWallsAdd = (currentCardOpenings[1] ? 0 : 1) + (this.cards[y][x + 1].openings[3] ? 0 : 1);
-				if(walls[y][x + 1] > currentWalls + currentWallsAdd) {
+				currentWallsAdd = (currentCardOpenings[1] ? 0 : 1)
+						+ (this.cards[y][x + 1].openings[3] ? 0 : 1);
+				if (walls[y][x + 1] > currentWalls + currentWallsAdd) {
 					walls[y][x + 1] = currentWalls + currentWallsAdd;
 				}
 			}
 
 			if (y < 7 - 1) { // Unten
-				currentWallsAdd = (currentCardOpenings[2] ? 0 : 1) + (this.cards[y + 1][x].openings[0] ? 0 : 1);
-				if(walls[y + 1][x] > currentWalls + currentWallsAdd) {
+				currentWallsAdd = (currentCardOpenings[2] ? 0 : 1)
+						+ (this.cards[y + 1][x].openings[0] ? 0 : 1);
+				if (walls[y + 1][x] > currentWalls + currentWallsAdd) {
 					walls[y + 1][x] = currentWalls + currentWallsAdd;
 				}
 			}
 
 			if (x > 0) { // Links
-				currentWallsAdd = (currentCardOpenings[3] ? 0 : 1) + (this.cards[y][x - 1].openings[1] ? 0 : 1);
-				if(walls[y][x - 1] > currentWalls + currentWallsAdd) {
+				currentWallsAdd = (currentCardOpenings[3] ? 0 : 1)
+						+ (this.cards[y][x - 1].openings[1] ? 0 : 1);
+				if (walls[y][x - 1] > currentWalls + currentWallsAdd) {
 					walls[y][x - 1] = currentWalls + currentWallsAdd;
 				}
 			}
 			visited[currentIndex] = true;
 			currentIndex = -1;
 			currentWalls = Integer.MAX_VALUE;
-			
-			while(didVisitAllFromEndTo >= 0 && visited[didVisitAllFromEndTo]) {
+
+			while (didVisitAllFromEndTo >= 0 && visited[didVisitAllFromEndTo]) {
 				--didVisitAllFromEndTo;
 			}
-			for(int i = didVisitAllFromEndTo; i >= 0; --i ) {
-				if(i>=0 && !visited[i]) {
-					if(walls[i/7][i%7] < currentWalls) {
-						currentWalls = walls[i/7][i%7];
+			for (int i = didVisitAllFromEndTo; i >= 0; --i) {
+				if (i >= 0 && !visited[i]) {
+					if (walls[i / 7][i % 7] < currentWalls) {
+						currentWalls = walls[i / 7][i % 7];
 						currentIndex = i;
 					}
 				}
@@ -246,39 +248,58 @@ public class Board {
 		}
 		return walls;
 	}
-	private void howManyWallsStraightLineRekursive(int[][] walls, int x, int y, int dx, int dy) {
-		int newx = x+dx, newy = y+dy;
-		if(0 > newx || newx > 6 || 0 > newy || newy > 6) return;
+
+	private void howManyWallsStraightLineRekursive(int[][] walls, int x, int y,
+			int dx, int dy) {
+		int newx = x + dx, newy = y + dy;
+		if (0 > newx || newx > 6 || 0 > newy || newy > 6) {
+			return;
+		}
 		boolean currentCardOpenings[] = this.cards[y][x].openings;
-		if(dx != 0 && dy != 0) {
-			walls[newy][newx] = 
-				walls[y][x] +
-				Math.min(
-					(currentCardOpenings[1+dy] ? 0 : 1) + (this.cards[newy][x].openings[1-dy] ? 0 : 1) + (this.cards[newy][x].openings[2-dx] ? 0 : 1) + (this.cards[newy][newx].openings[2+dx] ? 0 : 1),
-					(currentCardOpenings[2-dx] ? 0 : 1) + (this.cards[y][newx].openings[2+dx] ? 0 : 1) + (this.cards[y][newx].openings[1-dy] ? 0 : 1) + (this.cards[newy][newx].openings[1+dy] ? 0 : 1)
-					);
-			howManyWallsStraightLineRekursive(walls, newx, newy, dx, 0); //Vertikal
-			howManyWallsStraightLineRekursive(walls, newx, newy, 0, dy); //Horizontal
-			howManyWallsStraightLineRekursive(walls, newx, newy, dx, dy);
-		} else if(dy != 0) { //Vertikal
-			walls[newy][newx] = walls[y][x] + (currentCardOpenings[1+dy] ? 0 : 1) + (this.cards[newy][x].openings[1-dy] ? 0 : 1);
-			howManyWallsStraightLineRekursive(walls, newx, newy, 0, dy);
-		} else { //dx != 0 //Horizontal
-			walls[newy][newx] = walls[y][x] + (currentCardOpenings[2-dx] ? 0 : 1) + (this.cards[y][newx].openings[2+dx] ? 0 : 1);
-			howManyWallsStraightLineRekursive(walls, newx, newy, dx, 0);
+		if (dx != 0 && dy != 0) {
+			walls[newy][newx] = walls[y][x]
+					+ Math.min(
+							(currentCardOpenings[1 + dy] ? 0 : 1)
+									+ (this.cards[newy][x].openings[1 - dy] ? 0
+											: 1)
+									+ (this.cards[newy][x].openings[2 - dx] ? 0
+											: 1)
+									+ (this.cards[newy][newx].openings[2 + dx] ? 0
+											: 1),
+							(currentCardOpenings[2 - dx] ? 0 : 1)
+									+ (this.cards[y][newx].openings[2 + dx] ? 0
+											: 1)
+									+ (this.cards[y][newx].openings[1 - dy] ? 0
+											: 1)
+									+ (this.cards[newy][newx].openings[1 + dy] ? 0
+											: 1));
+			this.howManyWallsStraightLineRekursive(walls, newx, newy, dx, 0); // Vertikal
+			this.howManyWallsStraightLineRekursive(walls, newx, newy, 0, dy); // Horizontal
+			this.howManyWallsStraightLineRekursive(walls, newx, newy, dx, dy);
+		} else if (dy != 0) { // Vertikal
+			walls[newy][newx] = walls[y][x]
+					+ (currentCardOpenings[1 + dy] ? 0 : 1)
+					+ (this.cards[newy][x].openings[1 - dy] ? 0 : 1);
+			this.howManyWallsStraightLineRekursive(walls, newx, newy, 0, dy);
+		} else { // dx != 0 //Horizontal
+			walls[newy][newx] = walls[y][x]
+					+ (currentCardOpenings[2 - dx] ? 0 : 1)
+					+ (this.cards[y][newx].openings[2 + dx] ? 0 : 1);
+			this.howManyWallsStraightLineRekursive(walls, newx, newy, dx, 0);
 		}
 	}
+
 	public int[][] howManyWallsStraightLine(Position pos) {
 		int[][] walls = new int[7][7];
-		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 0,-1);
-		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1, 0);
-		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 0, 1);
-		howManyWallsStraightLineRekursive(walls, pos.x, pos.y,-1, 0);
+		this.howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 0, -1);
+		this.howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1, 0);
+		this.howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 0, 1);
+		this.howManyWallsStraightLineRekursive(walls, pos.x, pos.y, -1, 0);
 
-		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1,-1);
-		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1, 1);
-		howManyWallsStraightLineRekursive(walls, pos.x, pos.y, -1, 1);
-		howManyWallsStraightLineRekursive(walls, pos.x, pos.y,-1, -1);
+		this.howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1, -1);
+		this.howManyWallsStraightLineRekursive(walls, pos.x, pos.y, 1, 1);
+		this.howManyWallsStraightLineRekursive(walls, pos.x, pos.y, -1, 1);
+		this.howManyWallsStraightLineRekursive(walls, pos.x, pos.y, -1, -1);
 		return walls;
 	}
 
@@ -359,11 +380,11 @@ public class Board {
 		newBoard.cards[p.y][p.x] = new Card(this.shiftCard);
 		newBoard.shiftCard = tmp;
 
-		//Die Rausgeschobenen kommen wieder aufs board.
+		// Die Rausgeschobenen kommen wieder aufs board.
 		newBoard.cards[p.y][p.x].getPlayers().clear();
-		newBoard.cards[p.y][p.x].getPlayers().addAll(newBoard.shiftCard.getPlayers());
+		newBoard.cards[p.y][p.x].getPlayers().addAll(
+				newBoard.shiftCard.getPlayers());
 		newBoard.shiftCard.getPlayers().clear();
-		
 
 		for (int spieler : this.spielerPositions.keySet()) {
 			newBoard.spielerPositions.put(spieler, this.shiftPlayerPosition(
@@ -372,20 +393,21 @@ public class Board {
 		}
 		newBoard.myPosition = this.shiftPlayerPosition(this.myPosition,
 				vertikal ? p.x : p.y, direction, vertikal);
-		newBoard.treasurePosition = this.shiftCardPosition(this.treasurePosition,
-				vertikal ? p.x : p.y, direction, vertikal);
+		newBoard.treasurePosition = this.shiftCardPosition(
+				this.treasurePosition, vertikal ? p.x : p.y, direction,
+				vertikal);
 		// TODO: shift my & treasure position
-		if(vertikal) {
-			newBoard.forbidden = new Position(p.x ,(p.y + 6) % 12);
+		if (vertikal) {
+			newBoard.forbidden = new Position(p.x, (p.y + 6) % 12);
 		} else {
 			newBoard.forbidden = new Position((p.x + 6) % 12, p.y);
 		}
-		
+
 		return newBoard;
 	}
 
-	public Position shiftCardPosition(Position p, int pos,
-			int direction, boolean vertikal) {
+	public Position shiftCardPosition(Position p, int pos, int direction,
+			boolean vertikal) {
 		if (p == null) { // Karte ist aktuelle shift-karte => sie wird an der
 			// neuen stelle reingeschoben.
 			if (vertikal) {
@@ -403,31 +425,42 @@ public class Board {
 			}
 		} else {
 			if (vertikal) {
-				if(p.x == pos && (p.y + direction >=7 || p.y + direction < 0)) { //Karte wird rausgeschoben 
+				if (p.x == pos && (p.y + direction >= 7 || p.y + direction < 0)) { // Karte
+																					// wird
+																					// rausgeschoben
 					return null;
 				} else {
-					return new Position(p.x, p.x == pos ? (7 + p.y - direction) % 7	: p.y);
+					return new Position(p.x,
+							p.x == pos ? (7 + p.y - direction) % 7 : p.y);
 				}
 			} else {
-				if(p.y == pos && (p.x + direction >=7 || p.x + direction < 0)) {  //Karte wird rausgeschoben
+				if (p.y == pos && (p.x + direction >= 7 || p.x + direction < 0)) { // Karte
+																					// wird
+																					// rausgeschoben
 					return null;
 				} else {
-					return new Position(p.y == pos ? (7 + p.x - direction) % 7 : p.x, p.y);
+					return new Position(p.y == pos ? (7 + p.x - direction) % 7
+							: p.x, p.y);
 				}
 			}
 		}
 	}
 
-	public boolean isValidMove(Position p, Card c) { 
-		return isValidMove(p, c, false);
+	public boolean isValidMove(Position p, Card c) {
+		return this.isValidMove(p, c, false);
 	}
+
 	public boolean isValidMove(Position p, Card c, boolean printError) {
 		if (!c.isSame(this.shiftCard)) {
-			if (printError) System.err.println("Shiftcard is not the same.");
+			if (printError) {
+				System.err.println("Shiftcard is not the same.");
+			}
 			return false;
 		}
 		if (p.equals(this.forbidden)) {
-			if (printError) System.err.println("Forbidden Position used.");
+			if (printError) {
+				System.err.println("Forbidden Position used.");
+			}
 			return false;
 		}
 
@@ -436,8 +469,9 @@ public class Board {
 
 	public Position shiftPlayerPosition(Position p, int pos, int direction,
 			boolean vertical) {
-		if (p == null) { 
-			throw new IllegalArgumentException("Player position can not be null");
+		if (p == null) {
+			throw new IllegalArgumentException(
+					"Player position can not be null");
 		} else {
 			if (vertical) {
 				return new Position(p.x, p.x == pos ? (7 + p.y - direction) % 7
@@ -498,11 +532,13 @@ public class Board {
 			AnsiConsole.out.println();
 		}
 	}
+
 	public void clearForbidden() {
 		this.forbidden = null;
 	}
 
-	public Object shiftCardPosition(Position shiftPosition,	Position treasurePosition) {
+	public Object shiftCardPosition(Position shiftPosition,
+			Position treasurePosition) {
 		boolean vertikal = false;
 		int direction;
 		if (shiftPosition.x == 0) {// Karte wird links eingefuegt
@@ -520,11 +556,13 @@ public class Board {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		return shiftCardPosition(treasurePosition, vertikal ? shiftPosition.x : shiftPosition.y, direction, vertikal);
+		return this.shiftCardPosition(treasurePosition,
+				vertikal ? shiftPosition.x : shiftPosition.y, direction,
+				vertikal);
 	}
 
 	public void setMyPosition(Position position) {
-		myPosition = position;
-		
+		this.myPosition = position;
+
 	}
 }

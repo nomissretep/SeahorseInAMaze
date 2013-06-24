@@ -39,7 +39,7 @@ public class MaximumDamageKI extends Spieler {
 		c.turnCounterClockwise(this.minRotation);
 		mmt.setShiftCard(c.getCardType());
 		mmt.setShiftPosition(this.minShiftPosition.getPositionType());
-		mmt.setNewPinPos(minPinPosition.getPositionType());
+		mmt.setNewPinPos(this.minPinPosition.getPositionType());
 		return mmt;
 	}
 
