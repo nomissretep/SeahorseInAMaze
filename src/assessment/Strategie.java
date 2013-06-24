@@ -75,7 +75,7 @@ public class Strategie implements IStrategie {
 		int[][]tadd=Assessmentfield.add(tWayWeights, tWeights);
 		int[][]tposible=Assessmentfield.mult(iGo,tadd);
 		High h=Assessmentfield.findHigh(tposible);
-		System.out.println("an posi");
+		/*System.out.println("an posi");
 		System.out.println(h.pos.x);
 		System.out.println(h.pos.y);
 		System.out.println("Wo kann ich hin gehen");
@@ -94,9 +94,9 @@ public class Strategie implements IStrategie {
 			System.out.println();
 		}
 		
-		System.out.println("value");
+		System.out.println("value");*/
 		h.value+=fields*bewegung+schaetze2*schaetze;
-		System.out.println(h.value);
+		//System.out.println(h.value);
 		
 		
 		int i=0;
@@ -111,8 +111,8 @@ public class Strategie implements IStrategie {
 				++i;
 			}
 		}
-		System.out.println(h.value);
-		System.out.println("ende");
+		//System.out.println(h.value);
+		//System.out.println("ende");
 		return h;
 	}
 	
