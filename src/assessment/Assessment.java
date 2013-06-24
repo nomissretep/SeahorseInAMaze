@@ -1,6 +1,8 @@
 package assessment;
 
 
+import java.util.ArrayList;
+
 import ourGenerated.*;
 import generated.PositionType;
 import generated.TreasureType;
@@ -23,12 +25,38 @@ public class Assessment {
 		int iw;
 		int x_;
 		for(int y_=0;y_<7;y_++){
-			iw=100-(y_-x)*(y_-x);
+			iw=100-(y_-y)*(y_-y);
 			for(x_=0;x_<7;x_++)
-				weights[y_][x_]=iw-(x_-y)*(x_-y);
+				weights[y_][x_]=iw-(x_-x)*(x_-x);
 		}
 		return weights;
 	}
+	
+	
+	public int[][] randWeights(Position pos)//28-100
+	{
+		int x=pos.x;
+		int y=pos.y;
+		int[][] weights=new int[7][7];
+		int iw;
+		int x_;
+		for(int y_=0;y_<7;y_++){
+			weights[y_][6]=(y_-y)*(y_-y)-(-1-x)*(-1-x);
+			weights[y_][0]=(y_-y)*(y_-y)-(7-x)*(7-x);
+	}
+		for(x_=0;x_<7;x_++){
+				weights[6][x_]=(-1-y)*(-1-y)-(x_-x)*(x_-x);
+				weights[0][x_]=(7-y)*(7-y)-(x_-x)*(x_-x);
+		}
+		
+		return weights;
+	}
+	
+	public int[][] comboWeights(Position pos)//28-100
+	{
+		return Assessmentfield.higherField(randWeights(pos), weights(pos));
+	}
+	
 	
 	public boolean[][] findTreasures()
 	{
@@ -52,7 +80,11 @@ public class Assessment {
 	
 	public boolean[][] whereICanGo()
 	{
-		return whereToGo(board.getMyPosition());
+		ArrayList<Position> list=(ArrayList<Position>) board.getPossiblePositionsFromPosition(board.getMyPosition());
+		 boolean marked[][]=new boolean[7][7];
+		for(Position pos:list)
+			marked[pos.y][pos.x]=true;
+		return marked;
 	}
 	
 	private void whereToGo(Card[][] Cards,int y, int x,boolean marked[][])
