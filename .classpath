@@ -11,6 +11,6 @@
 	<classpathentry kind="lib" path="lib/jaxb-xjc.jar"/>
 	<classpathentry kind="lib" path="lib/jaxb-xjc.src.zip"/>
 	<classpathentry kind="lib" path="lib/jaxb-xjc-javadoc.jar"/>
-	<classpathentry kind="lib" path="/home/homeGlobal/speters/git/SeahorseInAMaze/lib/jansi-1.11.jar"/>
+	<classpathentry kind="lib" path="lib/jansi-1.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
