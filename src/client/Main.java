@@ -7,7 +7,6 @@ import java.util.Random;
 
 import spieler.DecisionKI;
 import spieler.ISpieler;
-import spieler.RekursiveDecisionKI;
 import spieler.Spieler;
 
 public class Main {
