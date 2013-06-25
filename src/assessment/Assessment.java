@@ -37,13 +37,14 @@ public class Assessment {
 		int[][] weights = new int[7][7];
 		int iw;
 		int x_;
-		for (int y_ = 0; y_ < 7; y_++) {
-			weights[y_][6] = (y_ - y) * (y_ - y) - (-1 - x) * (-1 - x);
-			weights[y_][0] = (y_ - y) * (y_ - y) - (7 - x) * (7 - x);
-		}
-		for (x_ = 0; x_ < 7; x_++) {
-			weights[6][x_] = (-1 - y) * (-1 - y) - (x_ - x) * (x_ - x);
-			weights[0][x_] = (7 - y) * (7 - y) - (x_ - x) * (x_ - x);
+
+		for(int y_=1;y_<7;y_+=2){
+			weights[y_][6]=(y_-y)*(y_-y)-(-1-x)*(-1-x);
+			weights[y_][0]=(y_-y)*(y_-y)-(7-x)*(7-x);
+	}
+		for(x_=1;x_<7;x_+=2){
+				weights[6][x_]=(-1-y)*(-1-y)-(x_-x)*(x_-x);
+				weights[0][x_]=(7-y)*(7-y)-(x_-x)*(x_-x);
 		}
 
 		return weights;
