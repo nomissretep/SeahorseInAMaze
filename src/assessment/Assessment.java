@@ -1,9 +1,10 @@
 package assessment;
 
+import java.util.ArrayList;
+
 import ourGenerated.Board;
 import ourGenerated.Card;
 import ourGenerated.Position;
-import java.util.ArrayList;
 
 public class Assessment {
 
@@ -11,8 +12,8 @@ public class Assessment {
 	Card[][] cards;
 
 	public Assessment(Board karte) {
-		board = karte;
-		this.cards = board.getCards();
+		this.board = karte;
+		this.cards = this.board.getCards();
 	}
 
 	public int[][] weights(Position pos)// 28-100
@@ -24,8 +25,9 @@ public class Assessment {
 		int x_;
 		for (int y_ = 0; y_ < 7; y_++) {
 			iw = 100 - (y_ - y) * (y_ - y);
-			for (x_ = 0; x_ < 7; x_++)
+			for (x_ = 0; x_ < 7; x_++) {
 				weights[y_][x_] = iw - (x_ - x) * (x_ - x);
+			}
 		}
 		return weights;
 	}
@@ -38,13 +40,13 @@ public class Assessment {
 		int iw;
 		int x_;
 
-		for(int y_=1;y_<7;y_+=2){
-			weights[y_][6]=(y_-y)*(y_-y)-(-1-x)*(-1-x);
-			weights[y_][0]=(y_-y)*(y_-y)-(7-x)*(7-x);
-	}
-		for(x_=1;x_<7;x_+=2){
-				weights[6][x_]=(-1-y)*(-1-y)-(x_-x)*(x_-x);
-				weights[0][x_]=(7-y)*(7-y)-(x_-x)*(x_-x);
+		for (int y_ = 1; y_ < 7; y_ += 2) {
+			weights[y_][6] = (y_ - y) * (y_ - y) - (-1 - x) * (-1 - x);
+			weights[y_][0] = (y_ - y) * (y_ - y) - (7 - x) * (7 - x);
+		}
+		for (x_ = 1; x_ < 7; x_ += 2) {
+			weights[6][x_] = (-1 - y) * (-1 - y) - (x_ - x) * (x_ - x);
+			weights[0][x_] = (7 - y) * (7 - y) - (x_ - x) * (x_ - x);
 		}
 
 		return weights;
@@ -52,16 +54,20 @@ public class Assessment {
 
 	public int[][] comboWeights(Position pos)// 28-100
 	{
-		return Assessmentfield.higherField(randWeights(pos), weights(pos));
+		return Assessmentfield.higherField(this.randWeights(pos),
+				this.weights(pos));
 	}
 
 	public boolean[][] findTreasures() {
-		Card[][] Cards = board.getCards();
+		Card[][] Cards = this.board.getCards();
 		boolean karten[][] = new boolean[7][7];
-		for (int y = 0; y < 7; y++)
-			for (int x = 0; x < 7; x++)
-				if (Cards[y][x].getTreasure() != null)
+		for (int y = 0; y < 7; y++) {
+			for (int x = 0; x < 7; x++) {
+				if (Cards[y][x].getTreasure() != null) {
 					karten[y][x] = true;
+				}
+			}
+		}
 		return karten;
 	}
 
@@ -115,40 +121,48 @@ public class Assessment {
 	}
 
 	public boolean[][] whereICanGo() {
-		ArrayList<Position> list = (ArrayList<Position>) board
-				.getPossiblePositionsFromPosition(board.getMyPosition());
+		ArrayList<Position> list = (ArrayList<Position>) this.board
+				.getPossiblePositionsFromPosition(this.board.getMyPosition());
 		boolean marked[][] = new boolean[7][7];
-		for (Position pos : list)
+		for (Position pos : list) {
 			marked[pos.y][pos.x] = true;
+		}
 		return marked;
 	}
 
 	// vorsicht sehr aufwendig
 	public int[][] nearTheWay(boolean[][] marked, int umfeld) {
-		Position pos = board.getMyPosition();
+		Position pos = this.board.getMyPosition();
 		int stx, endx, sty, endy;
-		if (pos.x < umfeld)
+		if (pos.x < umfeld) {
 			stx = 0;
-		else
+		} else {
 			stx = pos.x - umfeld;
-		if (pos.y < umfeld)
+		}
+		if (pos.y < umfeld) {
 			sty = 0;
-		else
+		} else {
 			sty = pos.y - umfeld;
-		if (pos.x + umfeld < 6)
+		}
+		if (pos.x + umfeld < 6) {
 			endx = pos.x + umfeld;
-		else
+		} else {
 			endx = 6;
-		if (pos.y + umfeld < 6)
+		}
+		if (pos.y + umfeld < 6) {
 			endy = pos.y + umfeld;
-		else
+		} else {
 			endy = 6;
+		}
 		int[][] result = new int[7][7];
-		for (; stx < endx; stx++)
-			for (; sty < endy; sty++)
-				if (marked[stx][sty])
-					result = Assessmentfield.higherField(weights(new Position(
-							stx, sty)), result);
+		for (; stx < endx; stx++) {
+			for (; sty < endy; sty++) {
+				if (marked[stx][sty]) {
+					result = Assessmentfield.higherField(
+							this.weights(new Position(stx, sty)), result);
+				}
+			}
+		}
 
 		return result;
 	}

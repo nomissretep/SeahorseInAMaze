@@ -1,6 +1,5 @@
 package assessment;
 
-
 public class Assessmentfield {
 	public static int[][] and(boolean a[][], boolean b[][]) {
 		int x;

@@ -66,56 +66,45 @@ public class Strategie implements IStrategie {
 
 		Assessmentfield.increase(tWeights, nah);
 		Assessmentfield.increase(tWayWeights, wegnah);
-		
-		//Wieviel Felder kann ich erreichen
-		int fields=Assessmentfield.count(iGo);		
-		//Wieviele Schaetze kann ich erreichen
-		int schaetze2=Assessmentfield.count(Assessmentfield.and(iGo,t));
-		
-		
-		
-		int[][]tadd=Assessmentfield.add(tWayWeights, tWeights);
-		int[][]tposible=Assessmentfield.mult(iGo,tadd);
-		High h=Assessmentfield.findHigh(tposible);
-		/*System.out.println("an posi");
-		System.out.println(h.pos.x);
-		System.out.println(h.pos.y);
-		System.out.println("Wo kann ich hin gehen");
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 7; j++) {
-				System.out.format("%2d ", iGo[i][j] ? 1 : 0);
-			}
-			System.out.println();
-		}
 
-		System.out.println("Mit weigts");
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 7; j++) {
-				System.out.format("%2d ", tposible[i][j]);
-			}
-			System.out.println();
-		}
+		// Wieviel Felder kann ich erreichen
+		int fields = Assessmentfield.count(iGo);
+		// Wieviele Schaetze kann ich erreichen
+		int schaetze2 = Assessmentfield.count(Assessmentfield.and(iGo, t));
 
-		
-		System.out.println("value");*/
-		h.value+=fields*bewegung+schaetze2*schaetze;
-		//System.out.println(h.value);
-		
-		
-		int i=0;
-		for(Position pGegner:board.getSpielerPositions().values())
-		{
-			if(!pGegner.equals(board.getMyPosition()))
-			{
-				boolean[][] gway=as.whereToGo(pGegner);
-				int gegnerSchaetze=Assessmentfield.count(Assessmentfield.and(gway,t));	
-			
-				h.value+=gegner[i]*(24-gegnerSchaetze);
+		int[][] tadd = Assessmentfield.add(tWayWeights, tWeights);
+		int[][] tposible = Assessmentfield.mult(iGo, tadd);
+		High h = Assessmentfield.findHigh(tposible);
+		/*
+		 * System.out.println("an posi"); System.out.println(h.pos.x);
+		 * System.out.println(h.pos.y);
+		 * System.out.println("Wo kann ich hin gehen"); for (int i = 0; i < 7;
+		 * i++) { for (int j = 0; j < 7; j++) { System.out.format("%2d ",
+		 * iGo[i][j] ? 1 : 0); } System.out.println(); }
+		 * 
+		 * System.out.println("Mit weigts"); for (int i = 0; i < 7; i++) { for
+		 * (int j = 0; j < 7; j++) { System.out.format("%2d ", tposible[i][j]);
+		 * } System.out.println(); }
+		 * 
+		 * 
+		 * System.out.println("value");
+		 */
+		h.value += fields * bewegung + schaetze2 * schaetze;
+		// System.out.println(h.value);
+
+		int i = 0;
+		for (Position pGegner : board.getSpielerPositions().values()) {
+			if (!pGegner.equals(board.getMyPosition())) {
+				boolean[][] gway = as.whereToGo(pGegner);
+				int gegnerSchaetze = Assessmentfield.count(Assessmentfield.and(
+						gway, t));
+
+				h.value += gegner[i] * (24 - gegnerSchaetze);
 				++i;
 			}
 		}
-		//System.out.println(h.value);
-		//System.out.println("ende");
+		// System.out.println(h.value);
+		// System.out.println("ende");
 		return h;
 	}
 
