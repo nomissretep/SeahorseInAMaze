@@ -74,7 +74,7 @@ public class NearWayDestroyKI extends Spieler {
 
 	@Override
 	public String getName() {
-		return "Strategic Seahorse NWD";
+		return "NWD";
 	}
 
 }

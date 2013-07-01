@@ -60,7 +60,6 @@ public class NearTheWayKI extends Spieler {
 			int rotationCount) {
 		try {
 			High h = strat.bewerte(bt.shift(new Position(x, y), c));
-			System.out.println(h.value);
 			if (h.value > this.currentMaxHigh.value) {
 				this.currentMaxHigh = h;
 				this.currentMaxX = x;
@@ -74,7 +73,7 @@ public class NearTheWayKI extends Spieler {
 
 	@Override
 	public String getName() {
-		return "Strategic Seahorse NW";
+		return "NW";
 	}
 
 }
